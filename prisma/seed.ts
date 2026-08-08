@@ -142,9 +142,9 @@ async function main() {
   console.log('✅ 50 Students created');
 
   // ─── Drives ───────────────────────────────────────────────────────────────
-  const recruiterProfile0 = await prisma.recruiterProfile.findUnique({ where: { userId: recruiters[0].id } });
-  const recruiterProfile1 = await prisma.recruiterProfile.findUnique({ where: { userId: recruiters[1].id } });
-  const recruiterProfile2 = await prisma.recruiterProfile.findUnique({ where: { userId: recruiters[2].id } });
+  const recruiterProfile0 = recruiters[0].recruiterProfile;
+  const recruiterProfile1 = recruiters[1].recruiterProfile;
+  const recruiterProfile2 = recruiters[2].recruiterProfile;
 
   if (!recruiterProfile0 || !recruiterProfile1 || !recruiterProfile2) throw new Error('Recruiter profiles not found');
 
