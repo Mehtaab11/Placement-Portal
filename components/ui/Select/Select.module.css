@@ -1,0 +1,22 @@
+.wrapper { display: flex; flex-direction: column; gap: 0.375rem; }
+.label { font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--color-text-primary); display: flex; align-items: center; gap: 0.25rem; }
+.required { color: var(--color-error); }
+.selectWrapper { position: relative; }
+.select {
+  width: 100%;
+  height: 40px;
+  padding: 0 2.5rem 0 var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  appearance: none;
+  cursor: pointer;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+.select:focus { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(249,115,22,0.12); outline: none; }
+.select.error { border-color: var(--color-error); }
+.chevron { position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--color-text-tertiary); pointer-events: none; }
+.errorText { font-size: var(--text-xs); color: var(--color-error); font-weight: var(--weight-medium); }
+.hint { font-size: var(--text-xs); color: var(--color-text-tertiary); }

@@ -1,0 +1,352 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Role {
+  STUDENT
+  RECRUITER
+  ADMIN
+}
+
+enum DriveStatus {
+  DRAFT
+  LIVE
+  CLOSED
+}
+
+enum JobType {
+  FULL_TIME
+  INTERNSHIP
+  CONTRACT
+}
+
+enum ApplicationStage {
+  APPLIED
+  SHORTLISTED
+  INTERVIEW
+  OFFERED
+  REJECTED
+}
+
+enum NotificationType {
+  DRIVE_PUBLISHED
+  APPLICATION_UPDATE
+  INTERVIEW_SCHEDULED
+  ANNOUNCEMENT
+  COMPANY_VERIFIED
+}
+
+// ─── Core Auth ────────────────────────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  role         Role
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  studentProfile   StudentProfile?
+  recruiterProfile RecruiterProfile?
+  notifications    Notification[]
+  announcements    Announcement[]
+  stageChanges     ApplicationStageHistory[]
+
+  @@index([email])
+  @@index([role])
+}
+
+// ─── Student ─────────────────────────────────────────────────────────────────
+
+model StudentProfile {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  fullName         String   @default("")
+  phone            String   @default("")
+  dateOfBirth      DateTime?
+  gender           String   @default("")
+  address          String   @default("")
+  branch           String   @default("")
+  batch            Int      @default(0)
+  cgpa             Float    @default(0)
+  backlogs         Int      @default(0)
+  rollNumber       String   @default("")
+  resumeUrl        String?
+  resumeFileName   String?
+  linkedinUrl      String   @default("")
+  githubUrl        String   @default("")
+  portfolioUrl     String   @default("")
+  skills           String[] @default([])
+  completenessScore Int     @default(0)
+  isPlaced         Boolean  @default(false)
+  placedCompany    String?
+  placedCTC        Float?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  user             User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  academicRecords  AcademicRecord[]
+  projects         Project[]
+  workExperiences  WorkExperience[]
+  applications     Application[]
+
+  @@index([branch])
+  @@index([batch])
+  @@index([cgpa])
+  @@index([isPlaced])
+}
+
+model AcademicRecord {
+  id          String   @id @default(cuid())
+  studentId   String
+  level       String   // "10th" | "12th" | "UG" | "PG"
+  institution String   @default("")
+  board       String   @default("")
+  degree      String   @default("")
+  fieldOfStudy String  @default("")
+  startYear   Int      @default(0)
+  endYear     Int      @default(0)
+  score       Float    @default(0)
+  scoreType   String   @default("percentage") // "percentage" | "cgpa"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  student StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  studentId   String
+  title       String   @default("")
+  description String   @default("")
+  techStack   String[] @default([])
+  liveUrl     String   @default("")
+  repoUrl     String   @default("")
+  startDate   DateTime?
+  endDate     DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  student StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+}
+
+model WorkExperience {
+  id          String   @id @default(cuid())
+  studentId   String
+  company     String   @default("")
+  role        String   @default("")
+  description String   @default("")
+  startDate   DateTime?
+  endDate     DateTime?
+  isCurrent   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  student StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+}
+
+// ─── Company & Recruiter ──────────────────────────────────────────────────────
+
+model Company {
+  id          String   @id @default(cuid())
+  name        String
+  website     String   @default("")
+  logoUrl     String?
+  industry    String   @default("")
+  description String   @default("")
+  address     String   @default("")
+  size        String   @default("") // "1-50" | "51-200" | "201-1000" | "1000+"
+  verified    Boolean  @default(false)
+  verifiedAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  recruiters  RecruiterProfile[]
+  drives      Drive[]
+
+  @@index([verified])
+  @@index([name])
+}
+
+model RecruiterProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  fullName    String   @default("")
+  phone       String   @default("")
+  designation String   @default("")
+  companyId   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company Company? @relation(fields: [companyId], references: [id])
+  drives  Drive[]
+
+  @@index([companyId])
+}
+
+// ─── Placement Drive ─────────────────────────────────────────────────────────
+
+model Drive {
+  id            String      @id @default(cuid())
+  title         String
+  description   String      @default("")
+  companyId     String
+  recruiterId   String
+  status        DriveStatus @default(DRAFT)
+  jobType       JobType     @default(FULL_TIME)
+  location      String      @default("")
+  isRemote      Boolean     @default(false)
+  ctcMin        Float       @default(0)
+  ctcMax        Float       @default(0)
+  deadline      DateTime
+  publishedAt   DateTime?
+  closedAt      DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  // Relations
+  company             Company              @relation(fields: [companyId], references: [id])
+  recruiter           RecruiterProfile     @relation(fields: [recruiterId], references: [id])
+  eligibilityCriteria EligibilityCriteria?
+  rounds              Round[]
+  applications        Application[]
+
+  @@index([status])
+  @@index([companyId])
+  @@index([recruiterId])
+  @@index([deadline])
+}
+
+model EligibilityCriteria {
+  id              String   @id @default(cuid())
+  driveId         String   @unique
+  minCGPA         Float    @default(0)
+  maxBacklogs     Int      @default(0)
+  allowedBranches String[] @default([])
+  allowedBatches  Int[]    @default([])
+  requiredSkills  String[] @default([])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  drive Drive @relation(fields: [driveId], references: [id], onDelete: Cascade)
+}
+
+model Round {
+  id          String   @id @default(cuid())
+  driveId     String
+  name        String   // "Online Test" | "Technical Round 1" | "HR Round" etc.
+  description String   @default("")
+  roundNumber Int
+  scheduledAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  drive Drive @relation(fields: [driveId], references: [id], onDelete: Cascade)
+
+  @@index([driveId])
+}
+
+// ─── Application ─────────────────────────────────────────────────────────────
+
+model Application {
+  id        String           @id @default(cuid())
+  studentId String
+  driveId   String
+  stage     ApplicationStage @default(APPLIED)
+  appliedAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  notes     String           @default("")
+
+  // Relations
+  student      StudentProfile          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  drive        Drive                   @relation(fields: [driveId], references: [id], onDelete: Cascade)
+  stageHistory ApplicationStageHistory[]
+  interviewSlots InterviewSlot[]
+
+  @@unique([studentId, driveId])
+  @@index([studentId])
+  @@index([driveId])
+  @@index([stage])
+}
+
+model ApplicationStageHistory {
+  id            String           @id @default(cuid())
+  applicationId String
+  stage         ApplicationStage
+  changedAt     DateTime         @default(now())
+  changedById   String?
+  notes         String           @default("")
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  changedBy   User?       @relation(fields: [changedById], references: [id])
+
+  @@index([applicationId])
+}
+
+model InterviewSlot {
+  id            String   @id @default(cuid())
+  applicationId String
+  scheduledAt   DateTime
+  round         String
+  location      String   @default("")
+  meetingLink   String   @default("")
+  notes         String   @default("")
+  createdAt     DateTime @default(now())
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId])
+}
+
+// ─── Notifications & Announcements ───────────────────────────────────────────
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  read      Boolean          @default(false)
+  link      String           @default("")
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([read])
+  @@index([createdAt])
+}
+
+model Announcement {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  createdById String
+  targetRoles Role[]   @default([])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy User @relation(fields: [createdById], references: [id])
+
+  @@index([createdAt])
+}

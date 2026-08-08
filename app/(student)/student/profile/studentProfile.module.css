@@ -1,0 +1,249 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header { display: flex; flex-direction: column; gap: 0.25rem; }
+.title { font-size: var(--text-2xl); font-weight: var(--weight-bold); color: var(--color-text-primary); }
+.subtitle { font-size: var(--text-sm); color: var(--color-text-secondary); }
+
+.tabs {
+  display: flex;
+  gap: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tabBtn {
+  background: transparent;
+  border: none;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.tabBtn:hover { color: var(--color-primary); }
+.activeTab {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.formCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.tabContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-5);
+}
+
+.fieldLabel {
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-secondary);
+  margin-bottom: 0.375rem;
+}
+
+.select, .textarea {
+  width: 100%;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  padding: 0.5rem 0.75rem;
+}
+.select:focus, .textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.skillsInputRow {
+  display: flex;
+  gap: var(--space-3);
+  max-width: 480px;
+}
+
+.skillInput {
+  flex: 1;
+  height: 38px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+}
+
+.tagsCloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.skillTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+}
+
+.removeTagBtn {
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+.uploadBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  text-align: center;
+  background: var(--color-bg-secondary);
+  gap: var(--space-2);
+}
+
+.uploadTitle {
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+}
+
+.uploadSub {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+.fileInput {
+  display: none;
+}
+
+.uploadBtn {
+  margin-top: var(--space-2);
+  display: inline-block;
+  background: var(--color-primary);
+  color: #fff;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+}
+
+.atsCard {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.atsHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.scoreCircle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #DCFCE7;
+  color: #16A34A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-weight: var(--weight-bold);
+}
+
+.scoreVal { font-size: var(--text-lg); }
+.scoreMax { font-size: 0.6875rem; }
+
+.atsTitle { font-size: var(--text-sm); font-weight: var(--weight-bold); color: var(--color-text-primary); }
+.atsSub { font-size: var(--text-xs); color: var(--color-text-secondary); }
+
+.atsSections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.atsSectionHead {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-secondary);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.pillRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.matchPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #DCFCE7;
+  color: #16A34A;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+.suggestPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #FEF3C7;
+  color: #D97706;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+.formFooter {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-4);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.loading {
+  padding: var(--space-8);
+  color: var(--color-text-secondary);
+}

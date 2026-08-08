@@ -1,0 +1,139 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.header { display: flex; flex-direction: column; gap: 0.25rem; }
+.title { font-size: var(--text-2xl); font-weight: var(--weight-bold); color: var(--color-text-primary); }
+.subtitle { font-size: var(--text-sm); color: var(--color-text-secondary); }
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+.statCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.statIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.statMeta { display: flex; flex-direction: column; }
+.statNumber { font-size: var(--text-2xl); font-weight: var(--weight-bold); color: var(--color-text-primary); }
+.statLabel { font-size: var(--text-xs); color: var(--color-text-secondary); }
+
+.sectionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: var(--space-6);
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardTitle { font-size: var(--text-base); font-weight: var(--weight-semibold); color: var(--color-text-primary); }
+
+.viewAll {
+  font-size: var(--text-xs);
+  color: var(--color-primary);
+  font-weight: var(--weight-medium);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  text-decoration: none;
+}
+
+.branchBars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.branchRow { display: flex; flex-direction: column; gap: 0.25rem; }
+
+.branchMeta {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+}
+
+.branchName { font-weight: var(--weight-semibold); color: var(--color-text-primary); }
+.branchCount { color: var(--color-text-secondary); }
+
+.bar {
+  width: 100%;
+  height: 10px;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.6s ease-out;
+}
+
+.driveList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.driveRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.driveInfo { display: flex; flex-direction: column; gap: 0.125rem; }
+.driveTitle { font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--color-text-primary); }
+.driveSub { font-size: var(--text-xs); color: var(--color-text-secondary); }
+
+.driveMetaRight { display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem; }
+
+.badge {
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-full);
+}
+.badge[data-status='LIVE'] { background: #DCFCE7; color: #16A34A; }
+.badge[data-status='CLOSED'] { background: #FEE2E2; color: #DC2626; }
+.badge[data-status='DRAFT'] { background: #FEF3C7; color: #D97706; }
+
+.applicantCount { font-size: 0.6875rem; color: var(--color-text-tertiary); }

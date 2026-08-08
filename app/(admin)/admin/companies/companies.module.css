@@ -1,0 +1,85 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header { display: flex; flex-direction: column; gap: 0.25rem; }
+.title { font-size: var(--text-2xl); font-weight: var(--weight-bold); color: var(--color-text-primary); }
+.subtitle { font-size: var(--text-sm); color: var(--color-text-secondary); }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-5);
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.companyName { font-size: var(--text-base); font-weight: var(--weight-bold); color: var(--color-text-primary); }
+.industry { font-size: var(--text-xs); color: var(--color-text-secondary); }
+
+.desc { font-size: var(--text-xs); color: var(--color-text-secondary); line-height: 1.5; }
+
+.metaRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-xs);
+  border-top: 1px dashed var(--color-border);
+  padding-top: var(--space-3);
+}
+
+.webLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+.webLink:hover { text-decoration: underline; }
+
+.drivesCount { color: var(--color-text-secondary); }
+
+.footer {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-2);
+}
+
+.verifiedTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-success);
+}

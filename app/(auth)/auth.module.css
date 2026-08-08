@@ -1,0 +1,154 @@
+.container {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 900px) {
+  .container { grid-template-columns: 1fr; }
+  .brand { display: none; }
+}
+
+/* ─── Brand Panel ─────────────────────────────────────── */
+.brand {
+  background: var(--color-dark);
+  padding: var(--space-12);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.brandInner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: var(--space-8);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.logoIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.logoTitle {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  color: var(--color-dark-text);
+}
+
+.logoSub {
+  font-size: var(--text-xs);
+  color: var(--color-dark-text-muted);
+}
+
+.brandContent {
+  margin-top: auto;
+}
+
+.brandHeadline {
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-weight: var(--weight-extrabold);
+  color: var(--color-dark-text);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-4);
+}
+
+.brandDesc {
+  font-size: var(--text-base);
+  color: var(--color-dark-text-muted);
+  line-height: 1.7;
+  max-width: 400px;
+}
+
+.stats {
+  display: flex;
+  gap: var(--space-8);
+  padding: var(--space-6) 0;
+  border-top: 1px solid var(--color-dark-border);
+  margin-top: auto;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.statValue {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-dark-text);
+}
+
+.statLabel {
+  font-size: var(--text-xs);
+  color: var(--color-dark-text-muted);
+}
+
+.bgDecor1 {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(249,115,22,0.15) 0%, transparent 70%);
+  top: -100px;
+  right: -100px;
+  pointer-events: none;
+}
+
+.bgDecor2 {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%);
+  bottom: 50px;
+  left: -50px;
+  pointer-events: none;
+}
+
+/* ─── Form Panel ──────────────────────────────────────── */
+.form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-8);
+  background: var(--color-bg);
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.formInner {
+  width: 100%;
+  max-width: 440px;
+  margin: auto 0;
+  padding: var(--space-6) 0;
+  animation: fade-in 400ms ease-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

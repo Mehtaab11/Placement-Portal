@@ -1,0 +1,65 @@
+.wrapper { overflow: hidden; }
+.tableScroll { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+.th {
+  padding: 0.625rem var(--space-4);
+  text-align: left;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+.th.sortable { cursor: pointer; user-select: none; }
+.th.sortable:hover { color: var(--color-text-primary); }
+.th.center { text-align: center; }
+.th.right  { text-align: right; }
+
+.thContent { display: inline-flex; align-items: center; gap: 0.375rem; }
+.sortIcon { color: var(--color-text-tertiary); display: flex; }
+
+.row {
+  transition: background var(--transition-fast);
+  border-bottom: 1px solid var(--color-border);
+}
+.row:hover { background: var(--color-bg-secondary); }
+.row:last-child { border-bottom: none; }
+
+.selectedRow { background: var(--color-primary-light); }
+.selectedRow:hover { background: #FEE4CE; }
+
+.td {
+  padding: 0.875rem var(--space-4);
+  color: var(--color-text-primary);
+  vertical-align: middle;
+}
+.td.center { text-align: center; }
+.td.right  { text-align: right; }
+
+.checkboxCol { width: 40px; }
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+  border-radius: var(--radius-sm);
+}
+
+.skeletonRow { animation: none; }
+.skeletonCell {
+  display: block;
+  border-radius: var(--radius-sm);
+  height: 14px;
+  background: linear-gradient(90deg, var(--color-bg-secondary) 25%, var(--color-bg-tertiary) 50%, var(--color-bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

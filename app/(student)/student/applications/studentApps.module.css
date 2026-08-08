@@ -1,0 +1,181 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header { display: flex; flex-direction: column; gap: 0.25rem; }
+.title { font-size: var(--text-2xl); font-weight: var(--weight-bold); color: var(--color-text-primary); }
+.subtitle { font-size: var(--text-sm); color: var(--color-text-secondary); }
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-12);
+  gap: var(--space-3);
+  text-align: center;
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-xl);
+}
+
+.primaryBtn {
+  background: var(--color-primary);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: var(--space-5);
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.companyInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-weight: var(--weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.roleTitle {
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+}
+
+.companyName {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+.stageTag {
+  font-size: 0.6875rem;
+  font-weight: var(--weight-semibold);
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.stageTag[data-stage='APPLIED'] { background: #EEF2FF; color: #4F46E5; }
+.stageTag[data-stage='SHORTLISTED'] { background: #FEF3C7; color: #D97706; }
+.stageTag[data-stage='INTERVIEW'] { background: #FDF4FF; color: #9333EA; }
+.stageTag[data-stage='OFFERED'] { background: #DCFCE7; color: #16A34A; }
+.stageTag[data-stage='REJECTED'] { background: #FEE2E2; color: #DC2626; }
+
+.roundsSection {
+  background: var(--color-bg-secondary);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sectionHeading {
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+}
+
+.pipeline {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  z-index: 1;
+}
+
+.stepDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-border);
+  border: 2px solid var(--color-surface);
+}
+
+.stepLabel {
+  font-size: 0.6875rem;
+  color: var(--color-text-tertiary);
+  font-weight: var(--weight-medium);
+}
+
+.step.completed .stepDot {
+  background: var(--color-success);
+}
+.step.completed .stepLabel {
+  color: var(--color-success);
+  font-weight: var(--weight-bold);
+}
+
+.step.active .stepDot {
+  background: var(--color-primary);
+}
+.step.active .stepLabel {
+  color: var(--color-primary);
+  font-weight: var(--weight-bold);
+}
+
+.interviewAlert {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: #FDF4FF;
+  border: 1px solid #F5D0FE;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  color: #9333EA;
+  font-size: var(--text-xs);
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-3);
+  font-size: var(--text-xs);
+}
+
+.appliedDate { color: var(--color-text-tertiary); }
+.ctc { font-weight: var(--weight-semibold); color: var(--color-success); }
