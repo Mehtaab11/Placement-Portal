@@ -5,6 +5,7 @@ import { Search, Bell, HelpCircle } from 'lucide-react';
 import { useState, useEffect, useRef, type ReactNode } from 'react';
 import Link from 'next/link';
 import { Avatar } from '@/components/ui/Avatar/Avatar';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 interface AppHeaderProps {
   title?: string;
@@ -62,6 +63,9 @@ export function AppHeader({
       </div>
 
       <div className={styles.right}>
+        {/* Theme toggle */}
+        <ThemeToggle id="header-theme-toggle" />
+
         {/* Notifications bell */}
         <Link
           href={notificationsHref}
@@ -97,3 +101,4 @@ export function AppHeader({
     </header>
   );
 }
+

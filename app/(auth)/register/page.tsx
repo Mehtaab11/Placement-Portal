@@ -112,7 +112,7 @@ export default function RegisterPage() {
               >
                 <Icon size={20} />
                 <span className={styles.roleCardLabel}>{r.label}</span>
-                <span className={styles.roleCardDesc}>{r.description}</span>
+                {/* <span className={styles.roleCardDesc}>{r.description}</span> */}
               </button>
             );
           })}

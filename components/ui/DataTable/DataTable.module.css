@@ -29,7 +29,7 @@
 .row:last-child { border-bottom: none; }
 
 .selectedRow { background: var(--color-primary-light); }
-.selectedRow:hover { background: #FEE4CE; }
+.selectedRow:hover { background: var(--color-primary-subtle); }
 
 .td {
   padding: 0.875rem var(--space-4);

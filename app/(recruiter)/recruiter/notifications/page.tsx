@@ -97,7 +97,7 @@ export default async function RecruiterNotificationsPage() {
                 gap: '1rem',
               }}
             >
-              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#FEF3C7', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--color-warning-light)', color: 'var(--color-warning)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <Info size={18} />
               </div>
               <div style={{ flex: 1 }}>

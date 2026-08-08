@@ -62,7 +62,7 @@ export default async function RecruiterDashboardPage() {
       {/* KPI Stats */}
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#EEF2FF', color: '#6366F1' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-primary-light)', color: 'var(--color-primary)' }}>
             <Briefcase size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -72,7 +72,7 @@ export default async function RecruiterDashboardPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#FEF3C7', color: '#D97706' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-warning-light)', color: 'var(--color-warning)' }}>
             <Users size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -82,7 +82,7 @@ export default async function RecruiterDashboardPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#FDF4FF', color: '#A855F7' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-purple-light)', color: 'var(--color-purple)' }}>
             <Calendar size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -92,7 +92,7 @@ export default async function RecruiterDashboardPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#DCFCE7', color: '#16A34A' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-success-light)', color: 'var(--color-success)' }}>
             <CheckCircle size={20} />
           </div>
           <div className={styles.statMeta}>

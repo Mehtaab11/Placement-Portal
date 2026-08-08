@@ -69,7 +69,7 @@ export default async function StudentDashboardPage() {
       {/* KPI Stats */}
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#EEF2FF', color: '#6366F1' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-primary-light)', color: 'var(--color-primary)' }}>
             <FileText size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -79,7 +79,7 @@ export default async function StudentDashboardPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#FEF3C7', color: '#D97706' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-warning-light)', color: 'var(--color-warning)' }}>
             <Clock size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -89,7 +89,7 @@ export default async function StudentDashboardPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#FDF4FF', color: '#A855F7' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-purple-light)', color: 'var(--color-purple)' }}>
             <Sparkles size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -99,7 +99,7 @@ export default async function StudentDashboardPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#DCFCE7', color: '#16A34A' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-success-light)', color: 'var(--color-success)' }}>
             <Award size={20} />
           </div>
           <div className={styles.statMeta}>

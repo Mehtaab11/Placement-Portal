@@ -1,7 +1,7 @@
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
-import { BarChart3, TrendingUp, Award, IndianRupee, Users, Download } from 'lucide-react';
+import { Award, IndianRupee, Users, TrendingUp, Building2, CheckCircle2 } from 'lucide-react';
 import styles from './reports.module.css';
 
 export default async function AdminReportsPage() {
@@ -20,6 +20,7 @@ export default async function AdminReportsPage() {
   const ctcs = placedProfiles.map((p) => p.placedCTC || 0);
   const highestCTC = ctcs.length > 0 ? Math.max(...ctcs) : 0;
   const avgCTC = ctcs.length > 0 ? (ctcs.reduce((a, b) => a + b, 0) / ctcs.length).toFixed(1) : 0;
+  const overallRate = totalStudents > 0 ? Math.round((placedStudents / totalStudents) * 100) : 0;
 
   const branches = ['CSE', 'IT', 'ECE', 'MECH', 'CIVIL'];
   const branchData = await Promise.all(
@@ -45,7 +46,7 @@ export default async function AdminReportsPage() {
       {/* Overview Cards */}
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#EEF2FF', color: '#6366F1' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-primary-light)', color: 'var(--color-primary)' }}>
             <Users size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -55,17 +56,17 @@ export default async function AdminReportsPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#DCFCE7', color: '#16A34A' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-success-light)', color: 'var(--color-success)' }}>
             <Award size={20} />
           </div>
           <div className={styles.statMeta}>
             <span className={styles.statNumber}>{placedStudents}</span>
-            <span className={styles.statLabel}>Total Placed</span>
+            <span className={styles.statLabel}>Placed Candidates</span>
           </div>
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#FEF3C7', color: '#D97706' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-warning-light)', color: 'var(--color-warning)' }}>
             <IndianRupee size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -75,7 +76,7 @@ export default async function AdminReportsPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#FDF4FF', color: '#A855F7' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-purple-light)', color: 'var(--color-purple)' }}>
             <TrendingUp size={20} />
           </div>
           <div className={styles.statMeta}>

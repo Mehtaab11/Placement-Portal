@@ -50,7 +50,7 @@ export default async function AdminDashboardPage() {
       {/* KPI Overview Cards */}
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#EEF2FF', color: '#6366F1' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-primary-light)', color: 'var(--color-primary)' }}>
             <Users size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -60,7 +60,7 @@ export default async function AdminDashboardPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#DCFCE7', color: '#16A34A' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-success-light)', color: 'var(--color-success)' }}>
             <Award size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -70,7 +70,7 @@ export default async function AdminDashboardPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#FEF3C7', color: '#D97706' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-warning-light)', color: 'var(--color-warning)' }}>
             <TrendingUp size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -80,7 +80,7 @@ export default async function AdminDashboardPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#FDF4FF', color: '#A855F7' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-purple-light)', color: 'var(--color-purple)' }}>
             <Building2 size={20} />
           </div>
           <div className={styles.statMeta}>

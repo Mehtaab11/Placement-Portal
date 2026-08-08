@@ -44,7 +44,7 @@ export default async function RecruiterAnalyticsPage() {
       {/* Top Level Summary Cards */}
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#EEF2FF', color: '#6366F1' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-primary-light)', color: 'var(--color-primary)' }}>
             <Users size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -54,7 +54,7 @@ export default async function RecruiterAnalyticsPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#FEF3C7', color: '#D97706' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-warning-light)', color: 'var(--color-warning)' }}>
             <BarChart3 size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -64,7 +64,7 @@ export default async function RecruiterAnalyticsPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#DCFCE7', color: '#16A34A' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-success-light)', color: 'var(--color-success)' }}>
             <CheckCircle size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -74,7 +74,7 @@ export default async function RecruiterAnalyticsPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: '#FDF4FF', color: '#A855F7' }}>
+          <div className={styles.statIcon} style={{ background: 'var(--color-purple-light)', color: 'var(--color-purple)' }}>
             <TrendingUp size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -94,7 +94,7 @@ export default async function RecruiterAnalyticsPage() {
               <strong>{totalApplied} (100%)</strong>
             </div>
             <div className={styles.funnelBar}>
-              <div className={styles.funnelFill} style={{ width: '100%', background: '#6366F1' }} />
+              <div className={styles.funnelFill} style={{ width: '100%', background: 'var(--color-primary)' }} />
             </div>
           </div>
 
@@ -110,7 +110,7 @@ export default async function RecruiterAnalyticsPage() {
                 className={styles.funnelFill}
                 style={{
                   width: `${totalApplied > 0 ? (totalShortlisted / totalApplied) * 100 : 0}%`,
-                  background: '#D97706',
+                  background: 'var(--color-warning)',
                 }}
               />
             </div>
@@ -128,7 +128,7 @@ export default async function RecruiterAnalyticsPage() {
                 className={styles.funnelFill}
                 style={{
                   width: `${totalApplied > 0 ? (totalInterviewed / totalApplied) * 100 : 0}%`,
-                  background: '#A855F7',
+                  background: 'var(--color-purple)',
                 }}
               />
             </div>
@@ -146,7 +146,7 @@ export default async function RecruiterAnalyticsPage() {
                 className={styles.funnelFill}
                 style={{
                   width: `${totalApplied > 0 ? (totalOffered / totalApplied) * 100 : 0}%`,
-                  background: '#16A34A',
+                  background: 'var(--color-success)',
                 }}
               />
             </div>

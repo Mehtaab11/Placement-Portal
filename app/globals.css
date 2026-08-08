@@ -1,58 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* ─── Design Tokens ────────────────────────────────────────────────────────── */
+/* ─── 10-Step Neutral Gray Scale & Shared Primitives ────────────────────────── */
 :root {
-  /* Colors — Light Theme */
-  --color-bg:           #FAFAF8;
-  --color-bg-secondary: #F4F4F1;
-  --color-bg-tertiary:  #EEECEA;
-  --color-surface:      #FFFFFF;
-  --color-surface-hover:#F7F7F5;
-  --color-border:       #E5E5E2;
-  --color-border-strong:#D0D0CC;
-
-  /* Text */
-  --color-text-primary:   #1A1A18;
-  --color-text-secondary: #6B6B68;
-  --color-text-tertiary:  #9D9D9A;
-  --color-text-on-dark:   #FFFFFF;
-
-  /* Brand — Amber/Orange accent (matching mockups) */
-  --color-primary:        #F97316;
-  --color-primary-hover:  #EA6A0A;
-  --color-primary-light:  #FFF4ED;
-  --color-primary-subtle: #FFE8D6;
-
-  /* Functional colors */
-  --color-success:        #16A34A;
-  --color-success-light:  #F0FDF4;
-  --color-success-border: #BBF7D0;
-  --color-warning:        #D97706;
-  --color-warning-light:  #FFFBEB;
-  --color-warning-border: #FDE68A;
-  --color-error:          #DC2626;
-  --color-error-light:    #FEF2F2;
-  --color-error-border:   #FECACA;
-  --color-info:           #2563EB;
-  --color-info-light:     #EFF6FF;
-  --color-info-border:    #BFDBFE;
-
-  /* Dark surface (sidebar, etc.) */
-  --color-dark:           #1C1C1A;
-  --color-dark-secondary: #2C2C2A;
-  --color-dark-border:    #3C3C3A;
-  --color-dark-text:      #F0F0EE;
-  --color-dark-text-muted:#9A9A98;
-
-  /* Application stage colors */
-  --color-stage-applied:      #6366F1;
-  --color-stage-shortlisted:  #0EA5E9;
-  --color-stage-interview:    #D97706;
-  --color-stage-offered:      #16A34A;
-  --color-stage-rejected:     #DC2626;
+  /* 10-Step Neutral Grayscale */
+  --gray-50:   #FAFAFA;
+  --gray-100:  #F4F4F5;
+  --gray-200:  #E4E4E7;
+  --gray-300:  #D4D4D8;
+  --gray-400:  #A1A1AA;
+  --gray-500:  #71717A;
+  --gray-600:  #52525B;
+  --gray-700:  #3F3F46;
+  --gray-800:  #27272A;
+  --gray-900:  #18181B;
+  --gray-950:  #0A0A0B;
 
   /* Typography */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 
   /* Font sizes */
@@ -95,13 +59,6 @@
   --radius-2xl:  24px;
   --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-xs:  0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md:  0 4px 6px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.04);
-  --shadow-lg:  0 10px 15px rgba(0, 0, 0, 0.06), 0 4px 6px rgba(0, 0, 0, 0.04);
-  --shadow-xl:  0 20px 25px rgba(0, 0, 0, 0.08), 0 8px 10px rgba(0, 0, 0, 0.04);
-
   /* Transitions */
   --transition-fast:   100ms ease-out;
   --transition-base:   150ms ease-out;
@@ -121,6 +78,133 @@
   --z-overlay: 300;
   --z-modal:   400;
   --z-toast:   500;
+
+  /* ─── Light Mode Tokens (Default) ────────────────────────────────────────── */
+  --color-bg:           #FAFAFA;
+  --color-bg-secondary: #F4F4F5;
+  --color-bg-tertiary:  #E4E4E7;
+  --color-surface:      #FFFFFF;
+  --color-surface-hover:#F4F4F5;
+  --color-border:       #E4E4E7;
+  --color-border-strong:#D4D4D8;
+
+  /* Text */
+  --color-text-primary:   #18181B;
+  --color-text-secondary: #71717A;
+  --color-text-tertiary:  #A1A1AA;
+  --color-text-on-dark:   #FAFAFA;
+
+  /* Confident Accent — Deep Indigo (#4F46E5) */
+  --color-primary:        #4F46E5;
+  --color-primary-hover:  #4338CA;
+  --color-primary-light:  #EEF2FF;
+  --color-primary-subtle: #E0E7FF;
+
+  /* Semantic Colors (Desaturated, Professional) */
+  --color-success:        #059669;
+  --color-success-light:  #ECFDF5;
+  --color-success-border: #A7F3D0;
+  --color-warning:        #D97706;
+  --color-warning-light:  #FFFBEB;
+  --color-warning-border: #FDE68A;
+  --color-error:          #DC2626;
+  --color-error-light:    #FEF2F2;
+  --color-error-border:   #FECACA;
+  --color-info:           #2563EB;
+  --color-info-light:     #EFF6FF;
+  --color-info-border:    #BFDBFE;
+  --color-purple:         #7C3AED;
+  --color-purple-light:   #F5F3FF;
+
+  /* Dark Surface (Sidebar) */
+  --color-dark:           #121215;
+  --color-dark-secondary: #18181B;
+  --color-dark-border:    #27272A;
+  --color-dark-text:      #FAFAFA;
+  --color-dark-text-muted:#A1A1AA;
+
+  /* Application Stage Colors */
+  --color-stage-applied:      #4F46E5;
+  --color-stage-shortlisted:  #0284C7;
+  --color-stage-interview:    #D97706;
+  --color-stage-offered:      #059669;
+  --color-stage-rejected:     #DC2626;
+
+  /* Shadows (Light) */
+  --shadow-xs:  0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md:  0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg:  0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  --shadow-xl:  0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* ─── Dark Mode Tokens ─────────────────────────────────────────────────────── */
+[data-theme="dark"],
+html[data-theme="dark"] {
+  --color-bg:           #0A0A0B;
+  --color-bg-secondary: #121215;
+  --color-bg-tertiary:  #18181B;
+  --color-surface:      #121215;
+  --color-surface-hover:#1C1C21;
+  --color-border:       #27272A;
+  --color-border-strong:#3F3F46;
+
+  /* Text */
+  --color-text-primary:   #FAFAFA;
+  --color-text-secondary: #A1A1AA;
+  --color-text-tertiary:  #71717A;
+  --color-text-on-dark:   #FAFAFA;
+
+  /* Confident Accent in Dark Mode — Indigo 500 (#6366F1) */
+  --color-primary:        #6366F1;
+  --color-primary-hover:  #818CF8;
+  --color-primary-light:  rgba(99, 102, 241, 0.15);
+  --color-primary-subtle: rgba(99, 102, 241, 0.25);
+
+  /* Semantic Colors (Desaturated, High Contrast in Dark) */
+  --color-success:        #10B981;
+  --color-success-light:  rgba(16, 185, 129, 0.15);
+  --color-success-border: rgba(16, 185, 129, 0.3);
+  --color-warning:        #F59E0B;
+  --color-warning-light:  rgba(245, 158, 11, 0.15);
+  --color-warning-border: rgba(245, 158, 11, 0.3);
+  --color-error:          #EF4444;
+  --color-error-light:    rgba(239, 68, 68, 0.15);
+  --color-error-border:   rgba(239, 68, 68, 0.3);
+  --color-info:           #3B82F6;
+  --color-info-light:     rgba(59, 130, 246, 0.15);
+  --color-info-border:    rgba(59, 130, 246, 0.3);
+  --color-purple:         #A855F7;
+  --color-purple-light:   rgba(168, 85, 247, 0.15);
+
+  /* Dark Surface (Sidebar) */
+  --color-dark:           #0A0A0B;
+  --color-dark-secondary: #18181B;
+  --color-dark-border:    #27272A;
+  --color-dark-text:      #FAFAFA;
+  --color-dark-text-muted:#71717A;
+
+  /* Application Stage Colors */
+  --color-stage-applied:      #818CF8;
+  --color-stage-shortlisted:  #38BDF8;
+  --color-stage-interview:    #FBBF24;
+  --color-stage-offered:      #34D399;
+  --color-stage-rejected:     #F87171;
+
+  /* Shadows (Dark Mode Elevation) */
+  --shadow-xs:  0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md:  0 4px 6px -1px rgba(0, 0, 0, 0.55), 0 2px 4px -1px rgba(0, 0, 0, 0.35);
+  --shadow-lg:  0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
+  --shadow-xl:  0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 10px 10px -5px rgba(0, 0, 0, 0.5);
+}
+
+/* ─── Smooth Theme Transition ─────────────────────────────────────────────── */
+html.theme-transitioning,
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+  transition: background-color 200ms ease-out, border-color 200ms ease-out, color 200ms ease-out, box-shadow 200ms ease-out !important;
 }
 
 /* ─── Reset & Base ─────────────────────────────────────────────────────────── */
@@ -151,7 +235,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-weight: var(--weight-semibold);
   line-height: 1.3;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   color: var(--color-text-primary);
 }
 
@@ -190,7 +274,7 @@ input, textarea, select {
 
 input:focus, textarea:focus, select:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
+  box-shadow: 0 0 0 3px var(--color-primary-subtle);
 }
 
 input::placeholder, textarea::placeholder {
@@ -301,6 +385,7 @@ input::placeholder, textarea::placeholder {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
 }
 
 .card-padding {
@@ -325,6 +410,7 @@ input::placeholder, textarea::placeholder {
   bottom: 0;
   z-index: var(--z-sticky);
   overflow-y: auto;
+  border-right: 1px solid var(--color-dark-border);
 }
 
 .app-main {

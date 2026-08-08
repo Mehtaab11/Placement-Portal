@@ -41,7 +41,7 @@ export default async function AdminNotificationsPage() {
                 gap: '1rem',
               }}
             >
-              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#DCFCE7', color: '#16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--color-success-light)', color: 'var(--color-success)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <Info size={18} />
               </div>
               <div style={{ flex: 1 }}>

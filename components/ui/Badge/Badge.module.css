@@ -44,11 +44,11 @@
 
 /* Application stages */
 .applied {
-  background: #EEF2FF;
+  background: var(--color-primary-light);
   color: var(--color-stage-applied);
 }
 .shortlisted {
-  background: #F0F9FF;
+  background: var(--color-info-light);
   color: var(--color-stage-shortlisted);
 }
 .interview {

@@ -97,7 +97,7 @@ export default async function StudentNotificationsPage() {
                 gap: '1rem',
               }}
             >
-              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#EEF2FF', color: '#6366F1', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--color-primary-light)', color: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <Info size={18} />
               </div>
               <div style={{ flex: 1 }}>
