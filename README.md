@@ -9,21 +9,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 <!-- Add screenshot/GIF here -->
-```
-                                 [ DASHBOARD PREVIEW ]
-   ┌────────────────────────────────────────────────────────────────────────────┐
-   │  🎓 TPO Portal                                      ⌘K  🔔  🌗  (Admin)    │
-   ├──────────────┬─────────────────────────────────────────────────────────────┤
-   │ 📊 Dashboard │  Registered Students   Placed Candidates   Placement Rate   │
-   │ 💼 Drives    │         240                   182              75.8%        │
-   │ 👥 Students  ├─────────────────────────────────────────────────────────────┤
-   │ 🏢 Companies │  Department Placement Summary        Active Campus Drives   │
-   │ 📈 Reports   │  CSE   ██████████████ 88%           Google (SWE - 32 LPA)   │
-   │ ⚙️ Settings  │  ECE   ███████████░░░ 72%           Amazon (SDE - 28 LPA)   │
-   └──────────────┴─────────────────────────────────────────────────────────────┘
-```
 
----
+![Dashboard](image.png)
 
 ## 📌 Overview
 
@@ -34,6 +21,7 @@
 ## ✨ Key Features
 
 ### 👨‍🎓 Student Portal
+
 - **One-Click Application System**: Instantly apply to active campus placement and internship drives with automated eligibility verification (minimum CGPA, allowed branch, and backlog clearance).
 - **Live Application Stage Tracker**: Real-time progress visualizer tracking applications across 5 stages: `APPLIED` → `SHORTLISTED` → `INTERVIEW` → `OFFERED` → `REJECTED`.
 - **Profile & Dossier Manager**: Build academic dossiers with semester-wise CGPA, active backlogs, technical skill tags, GitHub/LinkedIn links, and direct PDF/DOCX resume uploads.
@@ -41,12 +29,14 @@
 - **Real-Time Notification Center**: Instant in-app alerts for shortlist announcements, interview schedules, and offer letters.
 
 ### 💼 Recruiter Portal
+
 - **Drive Creator & Management**: Post placement drives with comprehensive job descriptions, CTC packages, bond durations, eligible batches, and academic cutoff thresholds.
 - **Applicant Pipeline Kanban / Table**: Manage candidate workflows with stage transitions and candidate profile drawer previews.
 - **Resume Viewer & Candidate Dossier**: Instant preview of student CGPA, backlogs, technical skill tags, and direct resume file downloads.
 - **Funnel Conversion Analytics**: Real-time throughput metrics calculating conversion ratios from initial applications to final released offers.
 
 ### 🛡️ TPO Administrator Portal
+
 - **Master Placement Command Center**: Institutional dashboard monitoring total student placement rates, salary benchmarks, and branch-wise placement progress.
 - **Drive Oversight & Status Control**: Full lifecycle control to publish, draft, or close campus placement drives.
 - **Master Student Directory**: Multi-criteria search and filtering by branch, batch, backlog status, and placement state with **UTF-8 BOM Excel/CSV cohort export**.
@@ -54,6 +44,7 @@
 - **Institutional Analytics & Reports**: Departmental placement summaries, highest/average CTC calculations, and compensation distribution tracking.
 
 ### 🌐 System-Wide Features
+
 - **Role-Based Access Control (RBAC)**: Secure NextAuth.js v5 JWT sessions with middleware route protection for `/student/*`, `/recruiter/*`, and `/admin/*`.
 - **Zero-Flash Theme Engine**: Integrated Light (`#FAFAFA`) and Dark (`#0A0A0B`) theme system with Deep Indigo accents and zero-flicker SSR hydration.
 - **Global Command Search**: Keyboard-accessible global search shortcut (`Ctrl+K` / `⌘K`) across students, drives, and partner organizations.
@@ -62,17 +53,17 @@
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology | Purpose |
-|---|---|---|
-| **Framework** | [Next.js 15.3.4](https://nextjs.org/) | App Router, Server Components, Route Handlers, SSR |
-| **Frontend Library** | [React 19.0.0](https://react.dev/) | Component architecture, Hooks, React Suspense |
-| **Language** | [TypeScript 5](https://www.typescriptlang.org/) | End-to-end type safety across schemas and UI |
-| **Styling** | Vanilla CSS Modules | Zero-runtime CSS Modules, Custom Design Tokens |
-| **Database & ORM** | [PostgreSQL](https://www.postgresql.org/) + [Prisma 6.7.0](https://www.prisma.io/) | Relational database schema, migrations, connection pooling |
-| **Authentication** | [NextAuth.js v5 Beta](https://authjs.dev/) + [bcryptjs](https://github.com/dcodeIO/bcrypt.js) | JWT session management, RBAC, password hashing |
-| **Form Management** | [React Hook Form](https://react-hook-form.com/) + [Zod 3.23](https://zod.dev/) | Client & server schema validation |
-| **Icons & Visuals** | [Lucide React](https://lucide.dev/) | Consistent, scalable vector UI iconography |
-| **Analytics Charts** | [Recharts 3.0](https://recharts.org/) | Data visualization for hiring funnels and placement rates |
+| Layer                | Technology                                                                                    | Purpose                                                    |
+| -------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| **Framework**        | [Next.js 15.3.4](https://nextjs.org/)                                                         | App Router, Server Components, Route Handlers, SSR         |
+| **Frontend Library** | [React 19.0.0](https://react.dev/)                                                            | Component architecture, Hooks, React Suspense              |
+| **Language**         | [TypeScript 5](https://www.typescriptlang.org/)                                               | End-to-end type safety across schemas and UI               |
+| **Styling**          | Vanilla CSS Modules                                                                           | Zero-runtime CSS Modules, Custom Design Tokens             |
+| **Database & ORM**   | [PostgreSQL](https://www.postgresql.org/) + [Prisma 6.7.0](https://www.prisma.io/)            | Relational database schema, migrations, connection pooling |
+| **Authentication**   | [NextAuth.js v5 Beta](https://authjs.dev/) + [bcryptjs](https://github.com/dcodeIO/bcrypt.js) | JWT session management, RBAC, password hashing             |
+| **Form Management**  | [React Hook Form](https://react-hook-form.com/) + [Zod 3.23](https://zod.dev/)                | Client & server schema validation                          |
+| **Icons & Visuals**  | [Lucide React](https://lucide.dev/)                                                           | Consistent, scalable vector UI iconography                 |
+| **Analytics Charts** | [Recharts 3.0](https://recharts.org/)                                                         | Data visualization for hiring funnels and placement rates  |
 
 ---
 
@@ -121,36 +112,42 @@ flowchart TD
 ## 📸 Live Demo & Screenshots
 
 <!-- Add demo link -->
-> 🔗 **Live Demo**: *[Add your deployed URL here]*
+
+**To be added**
+
+> 🔗 **Live Demo**: _[To be added]_
+
+**To be added**
 
 <!-- Add screenshots -->
-| Student Dashboard | Recruiter Pipeline | Admin Command Center |
-|---|---|---|
-| *<!-- Add Student Dashboard Screenshot -->* | *<!-- Add Recruiter Pipeline Screenshot -->* | *<!-- Add Admin Analytics Screenshot -->* |
-
----
 
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - **Node.js**: `v18.18.0` or higher (Node.js 20+ recommended)
 - **Database**: Local PostgreSQL instance or a serverless [Neon](https://neon.tech) / [Supabase](https://supabase.com) database
 - **Package Manager**: `npm` (v9+), `pnpm`, or `yarn`
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/Mehtaab11/Placement-Portal.git
 cd Placement-Portal
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 npm install
 ```
-*(Prisma Client will be automatically generated via the `postinstall` script).*
+
+_(Prisma Client will be automatically generated via the `postinstall` script)._
 
 ### 3. Configure Environment Variables
+
 Copy `.env.example` to `.env.local`:
+
 ```bash
 cp .env.example .env.local
 ```
@@ -158,19 +155,21 @@ cp .env.example .env.local
 <details>
 <summary><b>View Environment Variables Reference</b></summary>
 
-| Variable | Description | Example / Default |
-|---|---|---|
-| `DATABASE_URL` | PostgreSQL connection string (supports Neon pooler) | `postgresql://postgres:password@localhost:5432/tpo_db` |
-| `AUTH_SECRET` | 32+ character random encryption secret for NextAuth | `openssl rand -base64 32` |
-| `AUTH_URL` | Canonical app URL for Auth.js callbacks | `http://localhost:3000` |
-| `NEXTAUTH_URL` | Application root URL | `http://localhost:3000` |
-| `OPENAI_API_KEY` | *(Optional)* OpenAI key for future AI features | `sk-...` |
-| `GEMINI_API_KEY` | *(Optional)* Gemini key for future AI features | `AIzaSy...` |
+| Variable         | Description                                         | Example / Default                                      |
+| ---------------- | --------------------------------------------------- | ------------------------------------------------------ |
+| `DATABASE_URL`   | PostgreSQL connection string (supports Neon pooler) | `postgresql://postgres:password@localhost:5432/tpo_db` |
+| `AUTH_SECRET`    | 32+ character random encryption secret for NextAuth | `openssl rand -base64 32`                              |
+| `AUTH_URL`       | Canonical app URL for Auth.js callbacks             | `http://localhost:3000`                                |
+| `NEXTAUTH_URL`   | Application root URL                                | `http://localhost:3000`                                |
+| `OPENAI_API_KEY` | _(Optional)_ OpenAI key for future AI features      | `sk-...`                                               |
+| `GEMINI_API_KEY` | _(Optional)_ Gemini key for future AI features      | `AIzaSy...`                                            |
 
 </details>
 
 ### 4. Setup Database Schema & Seed Data
+
 Push the Prisma schema to your database and seed initial test data:
+
 ```bash
 # Push schema migrations to PostgreSQL
 npm run db:push
@@ -180,16 +179,19 @@ npm run db:seed
 ```
 
 #### Default Seed Credentials
-| Role | Email | Password |
-|---|---|---|
-| **Student** | `student@demo.com` | `Demo@1234` |
+
+| Role          | Email                | Password    |
+| ------------- | -------------------- | ----------- |
+| **Student**   | `student@demo.com`   | `Demo@1234` |
 | **Recruiter** | `recruiter@demo.com` | `Demo@1234` |
-| **TPO Admin** | `admin@demo.com` | `Demo@1234` |
+| **TPO Admin** | `admin@demo.com`     | `Demo@1234` |
 
 ### 5. Start the Development Server
+
 ```bash
 npm run dev
 ```
+
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
@@ -237,17 +239,17 @@ Placement-Portal/
 <details>
 <summary><b>View Key REST API Endpoints</b></summary>
 
-| Method | Endpoint | Description | Auth Required |
-|---|---|---|---|
-| `POST` | `/api/auth/register` | Register a new student or recruiter account | Public |
-| `GET` | `/api/student/drives` | List all active placement drives with eligibility info | Student |
-| `POST` | `/api/student/applications` | Submit application to a placement drive | Student |
-| `GET` | `/api/student/applications` | Retrieve student's submitted applications | Student |
-| `GET` | `/api/student/profile` | Fetch complete student profile dossier | Student |
-| `POST` | `/api/student/profile` | Update student profile details and skills | Student |
-| `POST` | `/api/student/resume` | Upload student resume file (PDF/DOCX) | Student |
-| `GET` | `/api/recruiter/drives` | Fetch drives posted by logged-in recruiter | Recruiter |
-| `POST` | `/api/recruiter/drives` | Post a new placement drive | Recruiter |
+| Method | Endpoint                                 | Description                                                       | Auth Required     |
+| ------ | ---------------------------------------- | ----------------------------------------------------------------- | ----------------- |
+| `POST` | `/api/auth/register`                     | Register a new student or recruiter account                       | Public            |
+| `GET`  | `/api/student/drives`                    | List all active placement drives with eligibility info            | Student           |
+| `POST` | `/api/student/applications`              | Submit application to a placement drive                           | Student           |
+| `GET`  | `/api/student/applications`              | Retrieve student's submitted applications                         | Student           |
+| `GET`  | `/api/student/profile`                   | Fetch complete student profile dossier                            | Student           |
+| `POST` | `/api/student/profile`                   | Update student profile details and skills                         | Student           |
+| `POST` | `/api/student/resume`                    | Upload student resume file (PDF/DOCX)                             | Student           |
+| `GET`  | `/api/recruiter/drives`                  | Fetch drives posted by logged-in recruiter                        | Recruiter         |
+| `POST` | `/api/recruiter/drives`                  | Post a new placement drive                                        | Recruiter         |
 | `POST` | `/api/recruiter/applications/[id]/stage` | Advance applicant pipeline stage (`SHORTLISTED`, `OFFERED`, etc.) | Recruiter / Admin |
 
 </details>
@@ -282,17 +284,17 @@ erDiagram
 
 ## 📜 Available Scripts
 
-| Script | Command | Purpose |
-|---|---|---|
-| `dev` | `npm run dev` | Starts Next.js development server on `http://localhost:3000` |
-| `build` | `npm run build` | Compiles optimized production bundle and checks types |
-| `start` | `npm start` | Starts production server after build |
-| `lint` | `npm run lint` | Runs ESLint analysis across the codebase |
-| `db:push` | `npm run db:push` | Syncs Prisma schema directly with the database without migrations |
-| `db:migrate` | `npm run db:migrate` | Generates and executes database migrations in development |
-| `db:studio` | `npm run db:studio` | Launches Prisma Studio GUI for exploring database records |
-| `db:seed` | `npm run db:seed` | Executes `prisma/seed.ts` to populate demo database records |
-| `db:reset` | `npm run db:reset` | Drops database, applies schema, and runs seed script |
+| Script        | Command               | Purpose                                                               |
+| ------------- | --------------------- | --------------------------------------------------------------------- |
+| `dev`         | `npm run dev`         | Starts Next.js development server on `http://localhost:3000`          |
+| `build`       | `npm run build`       | Compiles optimized production bundle and checks types                 |
+| `start`       | `npm start`           | Starts production server after build                                  |
+| `lint`        | `npm run lint`        | Runs ESLint analysis across the codebase                              |
+| `db:push`     | `npm run db:push`     | Syncs Prisma schema directly with the database without migrations     |
+| `db:migrate`  | `npm run db:migrate`  | Generates and executes database migrations in development             |
+| `db:studio`   | `npm run db:studio`   | Launches Prisma Studio GUI for exploring database records             |
+| `db:seed`     | `npm run db:seed`     | Executes `prisma/seed.ts` to populate demo database records           |
+| `db:reset`    | `npm run db:reset`    | Drops database, applies schema, and runs seed script                  |
 | `postinstall` | `npm run postinstall` | Automatically executes `prisma generate` upon dependency installation |
 
 ---
@@ -306,6 +308,7 @@ erDiagram
 ## 🚢 Deployment
 
 ### Deploying to Vercel (Recommended)
+
 1. Push your repository to GitHub.
 2. Import the project into **[Vercel](https://vercel.com/)**.
 3. Add the production environment variables:
@@ -351,7 +354,7 @@ This project is licensed under the **MIT License**. See the `LICENSE` file for d
 
 ## 📬 Author & Contact
 
-- **Maintainer**: Sahil Aaftaab
+- **Maintainer**: Mehtaab
 - **GitHub**: [@Mehtaab11](https://github.com/Mehtaab11)
 - **Repository**: [Placement-Portal](https://github.com/Mehtaab11/Placement-Portal)
 - **Feedback & Issues**: [GitHub Issues](https://github.com/Mehtaab11/Placement-Portal/issues)
