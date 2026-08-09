@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   GraduationCap,
   Briefcase,
@@ -99,7 +100,22 @@ export default function HomePage() {
       {/* Nav */}
       <nav className={styles.nav}>
         <div className={styles.navLogo}>
-          <span className={styles.navLogoIcon}>TP</span>
+          <Image
+            src="/logo.png"
+            alt="TPO Logo"
+            width={34}
+            height={34}
+            className={`${styles.navLogoImg} ${styles.logoLight}`}
+            priority
+          />
+          <Image
+            src="/logo-dark.png"
+            alt="TPO Logo"
+            width={34}
+            height={34}
+            className={`${styles.navLogoImg} ${styles.logoDark}`}
+            priority
+          />
           <span className={styles.navLogoText}>TPO Portal</span>
         </div>
         <div className={styles.navLinks}>
@@ -128,7 +144,7 @@ export default function HomePage() {
       <section className={styles.hero}>
         <div className={styles.heroChip}>
           <span className={styles.chipDot} aria-hidden="true" />
-          TPO Portal v2.0 is Live
+          TPO Portal is Live
         </div>
         <h1 className={styles.heroTitle}>
           The Future of
@@ -136,12 +152,14 @@ export default function HomePage() {
           <span className={styles.heroAccent}>Campus Placements.</span>
         </h1>
         <p className={styles.heroDesc}>
-          A simple and reliable platform connecting college students, company recruiters, and placement officers to organize campus drives, track application stages, and secure job offers.
+          A simple and reliable platform connecting college students, company
+          recruiters, and placement officers to organize campus drives, track
+          application stages, and secure job offers.
         </p>
         <div className={styles.heroActions}>
           <Link
             href="/login?role=STUDENT"
-            className={styles.heroBtn}
+            className={styles.heroBtnRole}
             id="hero-student-login"
           >
             <GraduationCap size={18} />
@@ -149,7 +167,7 @@ export default function HomePage() {
           </Link>
           <Link
             href="/login?role=RECRUITER"
-            className={styles.heroBtnSecondary}
+            className={styles.heroBtnRole}
             id="hero-recruiter-login"
           >
             <Briefcase size={18} />
@@ -157,7 +175,7 @@ export default function HomePage() {
           </Link>
           <Link
             href="/login?role=ADMIN"
-            className={styles.heroBtnSecondary}
+            className={styles.heroBtnRole}
             id="hero-admin-login"
           >
             <ShieldCheck size={16} />
@@ -212,7 +230,9 @@ export default function HomePage() {
             Everything you need in one place
           </h2>
           <p className={styles.sectionDesc}>
-            Clear and easy tools that help manage campus interviews, student applications, and placement updates without any spreadsheet confusion.
+            Clear and easy tools that help manage campus interviews, student
+            applications, and placement updates without any spreadsheet
+            confusion.
           </p>
         </div>
         <div className={styles.featuresGrid}>
@@ -245,7 +265,9 @@ export default function HomePage() {
             Designed for Everyone on Campus
           </h2>
           <p className={styles.sectionDesc}>
-            Dedicated and simple dashboard views created specifically for students applying to jobs, recruiters hiring candidates, and placement teams.
+            Dedicated and simple dashboard views created specifically for
+            students applying to jobs, recruiters hiring candidates, and
+            placement teams.
           </p>
         </div>
         <div className={styles.rolesGrid}>
@@ -298,41 +320,65 @@ export default function HomePage() {
             Contact Training & Placement Cell
           </h2>
           <p className={styles.sectionDesc}>
-            Get in touch with our campus placement coordinators for drive inquiries, student support, and recruiter partnership assistance.
+            Get in touch with our campus placement coordinators for drive
+            inquiries, student support, and recruiter partnership assistance.
           </p>
         </div>
 
         <div className={styles.contactGrid}>
           <div className={styles.contactCard}>
-            <div className={styles.contactCardIcon} style={{ background: 'var(--color-primary-light)', color: 'var(--color-primary)' }}>
+            <div
+              className={styles.contactCardIcon}
+              style={{
+                background: "var(--color-primary-light)",
+                color: "var(--color-primary)",
+              }}
+            >
               <MapPin size={22} />
             </div>
             <h3 className={styles.contactCardTitle}>Placement Office</h3>
-            <p className={styles.contactCardValue}>Room 204, Administrative Block, Main Campus</p>
+            <p className={styles.contactCardValue}>
+              Room 204, Administrative Block, Main Campus
+            </p>
             <p className={styles.contactCardDesc}>
-              Visit our desk during working hours for walk-in guidance and document verification.
+              Visit our desk during working hours for walk-in guidance and
+              document verification.
             </p>
           </div>
 
           <div className={styles.contactCard}>
-            <div className={styles.contactCardIcon} style={{ background: 'var(--color-success-light)', color: 'var(--color-success)' }}>
+            <div
+              className={styles.contactCardIcon}
+              style={{
+                background: "var(--color-success-light)",
+                color: "var(--color-success)",
+              }}
+            >
               <Mail size={22} />
             </div>
             <h3 className={styles.contactCardTitle}>Email Support</h3>
             <p className={styles.contactCardValue}>tpo@college.edu</p>
             <p className={styles.contactCardDesc}>
-              Send us an email anytime for student queries, verification requests, and company scheduling.
+              Send us an email anytime for student queries, verification
+              requests, and company scheduling.
             </p>
           </div>
 
           <div className={styles.contactCard}>
-            <div className={styles.contactCardIcon} style={{ background: 'var(--color-info-light)', color: 'var(--color-info)' }}>
+            <div
+              className={styles.contactCardIcon}
+              style={{
+                background: "var(--color-info-light)",
+                color: "var(--color-info)",
+              }}
+            >
               <Phone size={22} />
             </div>
             <h3 className={styles.contactCardTitle}>Placement Helpline</h3>
             <p className={styles.contactCardValue}>+91 (080) 2456-7890</p>
             <p className={styles.contactCardDesc}>
-              Call our helpline for immediate assistance with active recruitment drives and student login issues.
+              Call our helpline for immediate assistance with active recruitment
+              drives and student login issues.
             </p>
           </div>
         </div>
@@ -344,7 +390,8 @@ export default function HomePage() {
             <div>
               <span className={styles.hoursTitle}>Office Working Hours</span>
               <p className={styles.hoursText}>
-                Monday to Saturday: 9:00 AM – 5:00 PM (Closed on Sundays & Gazetted Holidays)
+                Monday to Saturday: 9:00 AM – 5:00 PM (Closed on Sundays &
+                Gazetted Holidays)
               </p>
             </div>
           </div>
@@ -358,10 +405,27 @@ export default function HomePage() {
       {/* Footer */}
       <footer className={styles.footer}>
         <div className={styles.footerLeft}>
-          <span className={styles.footerLogo}>TPO Portal</span>
-          <span className={styles.footerCopy}>
-            © 2024 Placement Management System. All rights reserved.
-          </span>
+          <div className={styles.footerBrandRow}>
+            <Image
+              src="/logo.png"
+              alt="TPO Logo"
+              width={26}
+              height={26}
+              className={`${styles.footerLogoImg} ${styles.logoLight}`}
+            />
+            <Image
+              src="/logo-dark.png"
+              alt="TPO Logo"
+              width={26}
+              height={26}
+              className={`${styles.footerLogoImg} ${styles.logoDark}`}
+            />
+            <span className={styles.footerLogo}>TPO Portal</span>
+          </div>
+          <p className={styles.footerCopy}>
+            © 2026 Placement Management System. Developed by{" "}
+            <strong>Mehtab Aalam & Amit Thakur</strong>.
+          </p>
         </div>
         <div className={styles.footerLinks}>
           <a href="#features" className={styles.footerLink}>

@@ -8,16 +8,19 @@ interface AvatarProps {
   className?: string;
 }
 
-function getInitials(name?: string): string {
+function getInitials(name?: string, size?: string): string {
   if (!name) return '?';
-  const parts = name.trim().split(/\s+/);
-  if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
-  return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+  const cleanName = name.includes('@') ? name.split('@')[0] : name;
+  const parts = cleanName.trim().split(/[\s._-]+/);
+  if (size === 'sm' || parts.length === 1) {
+    return parts[0].charAt(0).toUpperCase();
+  }
+  return (parts[0].charAt(0) + (parts[parts.length - 1]?.charAt(0) || '')).toUpperCase();
 }
 
 const COLORS = [
-  '#6366F1', '#8B5CF6', '#EC4899', '#F97316', '#EAB308',
-  '#22C55E', '#06B6D4', '#3B82F6', '#14B8A6', '#F43F5E',
+  '#4F46E5', '#7C3AED', '#EC4899', '#2563EB', '#059669',
+  '#0D9488', '#0284C7', '#6366F1', '#8B5CF6', '#10B981',
 ];
 
 function getColor(name?: string): string {
@@ -27,7 +30,7 @@ function getColor(name?: string): string {
 }
 
 export function Avatar({ src, name, size = 'md', className }: AvatarProps) {
-  const initials = getInitials(name);
+  const initials = getInitials(name, size);
   const color = getColor(name);
 
   if (src) {

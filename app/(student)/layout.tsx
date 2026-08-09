@@ -1,4 +1,5 @@
 import { auth } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { AppSidebar } from '@/components/layout/AppSidebar/AppSidebar';
 import { AppHeader } from '@/components/layout/AppHeader/AppHeader';
@@ -10,15 +11,23 @@ export default async function StudentLayout({ children }: { children: ReactNode 
   if (!session) redirect('/login');
   if (session.user.role !== 'STUDENT') redirect('/login');
 
+  const profile = await prisma.studentProfile.findUnique({
+    where: { userId: session.user.id },
+    select: { fullName: true },
+  });
+
+  const displayName = profile?.fullName || session.user.name || session.user.email;
+
   return (
     <div className={styles.shell}>
       <AppSidebar
         role="STUDENT"
-        userName={session.user.email}
+        userName={displayName}
       />
       <div className={styles.main}>
         <AppHeader
           user={{
+            name: displayName,
             email: session.user.email,
             role: 'STUDENT',
           }}

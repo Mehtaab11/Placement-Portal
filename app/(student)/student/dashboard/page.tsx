@@ -1,14 +1,23 @@
-import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
-import Link from 'next/link';
-import { redirect } from 'next/navigation';
-import { Briefcase, FileText, CheckCircle2, Award, Clock, ArrowRight, Sparkles, Building2 } from 'lucide-react';
-import { formatDate } from '@/lib/utils';
-import styles from './studentDashboard.module.css';
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import {
+  Briefcase,
+  FileText,
+  CheckCircle2,
+  Award,
+  Clock,
+  ArrowRight,
+  Sparkles,
+  Building2,
+} from "lucide-react";
+import { formatDate } from "@/lib/utils";
+import styles from "./studentDashboard.module.css";
 
 export default async function StudentDashboardPage() {
   const session = await auth();
-  if (!session || session.user.role !== 'STUDENT') redirect('/login');
+  if (!session || session.user.role !== "STUDENT") redirect("/login");
 
   const profile = await prisma.studentProfile.findUnique({
     where: { userId: session.user.id },
@@ -16,25 +25,29 @@ export default async function StudentDashboardPage() {
       applications: {
         include: {
           drive: { include: { company: true } },
-          stageHistory: { orderBy: { changedAt: 'desc' } },
+          stageHistory: { orderBy: { changedAt: "desc" } },
         },
-        orderBy: { appliedAt: 'desc' },
+        orderBy: { appliedAt: "desc" },
       },
     },
   });
 
   const activeDrives = await prisma.drive.findMany({
-    where: { status: 'LIVE' },
+    where: { status: "LIVE" },
     include: { company: true, eligibilityCriteria: true },
-    orderBy: { createdAt: 'desc' },
+    orderBy: { createdAt: "desc" },
     take: 4,
   });
 
   const applications = profile?.applications || [];
   const appliedCount = applications.length;
-  const shortlistedCount = applications.filter((a) => a.stage === 'SHORTLISTED').length;
-  const interviewCount = applications.filter((a) => a.stage === 'INTERVIEW').length;
-  const offeredCount = applications.filter((a) => a.stage === 'OFFERED').length;
+  const shortlistedCount = applications.filter(
+    (a) => a.stage === "SHORTLISTED",
+  ).length;
+  const interviewCount = applications.filter(
+    (a) => a.stage === "INTERVIEW",
+  ).length;
+  const offeredCount = applications.filter((a) => a.stage === "OFFERED").length;
 
   const completeness = profile?.completenessScore || 40;
 
@@ -44,7 +57,7 @@ export default async function StudentDashboardPage() {
       <div className={styles.hero}>
         <div className={styles.heroText}>
           <h1 className={styles.greeting}>
-            Welcome back, {profile?.fullName || 'Student'} 👋
+            Welcome back, {profile?.fullName || "Student"}
           </h1>
           <p className={styles.subGreeting}>
             Here is what is happening with your placement applications today.
@@ -52,11 +65,16 @@ export default async function StudentDashboardPage() {
         </div>
         <div className={styles.completenessBox}>
           <div className={styles.completenessHeader}>
-            <span className={styles.completenessLabel}>Profile Completeness</span>
+            <span className={styles.completenessLabel}>
+              Profile Completeness
+            </span>
             <span className={styles.completenessVal}>{completeness}%</span>
           </div>
           <div className={styles.progressBar}>
-            <div className={styles.progressFill} style={{ width: `${completeness}%` }} />
+            <div
+              className={styles.progressFill}
+              style={{ width: `${completeness}%` }}
+            />
           </div>
           {completeness < 100 && (
             <Link href="/student/profile" className={styles.completeLink}>
@@ -69,7 +87,13 @@ export default async function StudentDashboardPage() {
       {/* KPI Stats */}
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: 'var(--color-primary-light)', color: 'var(--color-primary)' }}>
+          <div
+            className={styles.statIcon}
+            style={{
+              background: "var(--color-primary-light)",
+              color: "var(--color-primary)",
+            }}
+          >
             <FileText size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -79,7 +103,13 @@ export default async function StudentDashboardPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: 'var(--color-warning-light)', color: 'var(--color-warning)' }}>
+          <div
+            className={styles.statIcon}
+            style={{
+              background: "var(--color-warning-light)",
+              color: "var(--color-warning)",
+            }}
+          >
             <Clock size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -89,7 +119,13 @@ export default async function StudentDashboardPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: 'var(--color-purple-light)', color: 'var(--color-purple)' }}>
+          <div
+            className={styles.statIcon}
+            style={{
+              background: "var(--color-purple-light)",
+              color: "var(--color-purple)",
+            }}
+          >
             <Sparkles size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -99,7 +135,13 @@ export default async function StudentDashboardPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: 'var(--color-success-light)', color: 'var(--color-success)' }}>
+          <div
+            className={styles.statIcon}
+            style={{
+              background: "var(--color-success-light)",
+              color: "var(--color-success)",
+            }}
+          >
             <Award size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -138,15 +180,14 @@ export default async function StudentDashboardPage() {
                     </div>
                     <div>
                       <h3 className={styles.appRole}>{app.drive.title}</h3>
-                      <p className={styles.appCompany}>{app.drive.company.name}</p>
+                      <p className={styles.appCompany}>
+                        {app.drive.company.name}
+                      </p>
                     </div>
                   </div>
 
                   <div className={styles.appStatus}>
-                    <span
-                      className={styles.stageBadge}
-                      data-stage={app.stage}
-                    >
+                    <span className={styles.stageBadge} data-stage={app.stage}>
                       {app.stage}
                     </span>
                     <span className={styles.recentDate}>
@@ -182,8 +223,13 @@ export default async function StudentDashboardPage() {
                 </div>
                 <h3 className={styles.driveTitle}>{drive.title}</h3>
                 <div className={styles.driveBottom}>
-                  <span className={styles.driveMeta}>{drive.location} • {drive.jobType}</span>
-                  <Link href={`/student/drives`} className={styles.applySmallBtn}>
+                  <span className={styles.driveMeta}>
+                    {drive.location} • {drive.jobType}
+                  </span>
+                  <Link
+                    href={`/student/drives`}
+                    className={styles.applySmallBtn}
+                  >
                     View Details
                   </Link>
                 </div>

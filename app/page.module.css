@@ -18,8 +18,31 @@
 .navLogo {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-3);
   text-decoration: none;
+}
+
+.navLogoImg {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+.logoLight {
+  display: block;
+}
+
+.logoDark {
+  display: none;
+}
+
+:global([data-theme='dark']) .logoLight {
+  display: none;
+}
+
+:global([data-theme='dark']) .logoDark {
+  display: block;
 }
 
 .navLogoIcon {
@@ -27,17 +50,18 @@
   height: 32px;
   border-radius: var(--radius-md);
   background: var(--color-primary);
-  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
+  color: #fff;
+  flex-shrink: 0;
 }
 
 .navLogoText {
   font-size: var(--text-base);
-  font-weight: var(--weight-semibold);
+  font-weight: var(--weight-bold);
   color: var(--color-text-primary);
 }
 
@@ -77,14 +101,14 @@
 .navCTA {
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
-  background: var(--color-dark);
+  background: var(--color-primary);
   color: #fff;
   padding: 0.5rem var(--space-5);
   border-radius: var(--radius-full);
   text-decoration: none;
   transition: background var(--transition-base);
 }
-.navCTA:hover { background: var(--color-primary); color: #fff; }
+.navCTA:hover { background: var(--color-primary-hover); color: #fff; }
 
 /* ─── Hero ──────────────────────────────────────────────── */
 .hero {
@@ -143,20 +167,49 @@
   flex-wrap: wrap;
 }
 
-.heroBtn {
+.heroBtnRole {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  background: var(--color-dark);
-  color: #fff;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius-full);
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
+  border: 1.5px solid var(--color-border);
   text-decoration: none;
-  transition: background var(--transition-base);
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-xs);
 }
-.heroBtn:hover { background: var(--color-primary); color: #fff; }
+
+.heroBtnRole:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.heroBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  border: 1.5px solid var(--color-border);
+  text-decoration: none;
+  transition: all var(--transition-base);
+}
+.heroBtn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
 
 .heroBtnSecondary {
   display: inline-flex;
@@ -489,6 +542,7 @@
 
 .hoursBtn:hover {
   background: var(--color-primary-hover);
+  color: #000;
 }
 
 /* ─── Footer ────────────────────────────────────────────── */
@@ -499,26 +553,46 @@
   padding: var(--space-6) var(--space-8);
   border-top: 1px solid var(--color-border);
   background: var(--color-surface);
+  flex-wrap: wrap;
+  gap: var(--space-4);
 }
 
 .footerLeft {
   display: flex;
   align-items: center;
   gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.footerBrandRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.footerLogoImg {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
 }
 
 .footerLogo {
   font-size: var(--text-sm);
-  font-weight: var(--weight-semibold);
+  font-weight: var(--weight-bold);
   color: var(--color-text-primary);
 }
 
 .footerCopy {
   font-size: var(--text-xs);
-  color: var(--color-text-tertiary);
+  color: var(--color-text-secondary);
 }
 
-.footerLinks { display: flex; gap: var(--space-5); }
+.footerCopy strong {
+  color: var(--color-text-primary);
+  font-weight: var(--weight-semibold);
+}
+
+.footerLinks { display: flex; gap: var(--space-5); align-items: center; }
 
 .footerLink {
   font-size: var(--text-xs);

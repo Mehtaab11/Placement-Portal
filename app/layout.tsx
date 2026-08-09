@@ -10,7 +10,12 @@ export const metadata: Metadata = {
   description:
     'A unified command center for campus placements — connecting students, recruiters, and TPO administrators.',
   keywords: ['placement', 'campus recruitment', 'TPO', 'job portal', 'internship'],
-  authors: [{ name: 'TPO Portal' }],
+  authors: [{ name: 'Mehtab Aalam & Amit Thakur' }],
+  icons: {
+    icon: '/icon.png',
+    shortcut: '/favicon.ico',
+    apple: '/icon.png',
+  },
   openGraph: {
     title: 'TPO Portal — Training & Placement Office',
     description: 'Streamline campus placements with real-time tracking, analytics, and AI-powered insights.',

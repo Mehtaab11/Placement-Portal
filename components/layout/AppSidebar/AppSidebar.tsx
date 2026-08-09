@@ -2,6 +2,7 @@
 
 import styles from './AppSidebar.module.css';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import { clsx } from 'clsx';
@@ -70,10 +71,19 @@ export function AppSidebar({ role, userName }: AppSidebarProps) {
     <aside className={styles.sidebar} aria-label="Main navigation">
       {/* Logo */}
       <div className={styles.logo}>
-        <div className={styles.logoIcon}>TP</div>
+        <Image
+          src="/logo-dark.png"
+          alt="TPO Logo"
+          width={34}
+          height={34}
+          className={styles.logoImg}
+          priority
+        />
         <div>
           <p className={styles.logoTitle}>TPO Portal</p>
-          <p className={styles.logoSub}>Management System</p>
+          <p className={styles.logoSub}>
+            {role === 'ADMIN' ? 'Admin Portal' : role === 'RECRUITER' ? 'Recruiter Hub' : 'Student Desk'}
+          </p>
         </div>
       </div>
 

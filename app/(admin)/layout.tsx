@@ -10,15 +10,18 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   if (!session) redirect('/login');
   if (session.user.role !== 'ADMIN') redirect('/login');
 
+  const displayName = session.user.name || 'TPO Admin';
+
   return (
     <div className={styles.shell}>
       <AppSidebar
         role="ADMIN"
-        userName={session.user.email}
+        userName={displayName}
       />
       <div className={styles.main}>
         <AppHeader
           user={{
+            name: displayName,
             email: session.user.email,
             role: 'ADMIN',
           }}

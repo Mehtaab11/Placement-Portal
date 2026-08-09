@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import styles from './auth.module.css';
 import type { ReactNode } from 'react';
 
@@ -13,7 +14,14 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       <div className={styles.brand}>
         <div className={styles.brandInner}>
           <div className={styles.logo}>
-            <span className={styles.logoIcon}>TP</span>
+            <Image
+              src="/logo-dark.png"
+              alt="TPO Logo"
+              width={40}
+              height={40}
+              className={styles.logoImg}
+              priority
+            />
             <div>
               <p className={styles.logoTitle}>TPO Portal</p>
               <p className={styles.logoSub}>Management System</p>

@@ -23,6 +23,14 @@
   padding: 0 var(--space-2);
 }
 
+.logoImg {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
 .logoIcon {
   width: 36px;
   height: 36px;
