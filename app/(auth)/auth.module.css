@@ -28,6 +28,15 @@
   gap: var(--space-8);
 }
 
+.logoLink {
+  text-decoration: none;
+  display: inline-flex;
+  transition: opacity var(--transition-base);
+}
+.logoLink:hover {
+  opacity: 0.85;
+}
+
 .logo {
   display: flex;
   align-items: center;

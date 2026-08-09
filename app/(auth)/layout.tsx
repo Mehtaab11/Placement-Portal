@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from './auth.module.css';
 import type { ReactNode } from 'react';
 
@@ -13,20 +14,22 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       {/* Left brand panel */}
       <div className={styles.brand}>
         <div className={styles.brandInner}>
-          <div className={styles.logo}>
-            <Image
-              src="/logo-dark.png"
-              alt="TPO Logo"
-              width={40}
-              height={40}
-              className={styles.logoImg}
-              priority
-            />
-            <div>
-              <p className={styles.logoTitle}>TPO Portal</p>
-              <p className={styles.logoSub}>Management System</p>
+          <Link href="/" className={styles.logoLink} title="Return to Dashboard">
+            <div className={styles.logo}>
+              <Image
+                src="/logo-dark.png"
+                alt="TPO Logo"
+                width={40}
+                height={40}
+                className={styles.logoImg}
+                priority
+              />
+              <div>
+                <p className={styles.logoTitle}>TPO Portal</p>
+                <p className={styles.logoSub}>Management System</p>
+              </div>
             </div>
-          </div>
+          </Link>
           <div className={styles.brandContent}>
             <h1 className={styles.brandHeadline}>
               The Future of<br />Campus Placements.

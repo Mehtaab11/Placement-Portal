@@ -6,11 +6,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
-import { Eye, EyeOff, LogIn, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, LogIn, Loader2, GraduationCap, Briefcase, ShieldCheck } from 'lucide-react';
 import { loginSchema, type LoginInput } from '@/lib/validations';
 import { Button } from '@/components/ui/Button/Button';
 import { Input } from '@/components/ui/Input/Input';
 import styles from './login.module.css';
+import { clsx } from 'clsx';
 
 function LoginForm() {
   const router = useRouter();
@@ -19,6 +20,7 @@ function LoginForm() {
   const roleParam = searchParams.get('role');
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState('');
+  const [selectedDemo, setSelectedDemo] = useState<string | null>(null);
 
   const {
     register,
@@ -30,12 +32,13 @@ function LoginForm() {
   });
 
   const DEMO_ACCOUNTS = [
-    { role: 'Student', email: 'student@demo.com', pass: 'Demo@1234', badge: '🎓 Student' },
-    { role: 'Recruiter', email: 'recruiter@demo.com', pass: 'Demo@1234', badge: '💼 Recruiter' },
-    { role: 'Admin', email: 'admin@demo.com', pass: 'Demo@1234', badge: '🛡️ Admin' },
+    { role: 'Student', email: 'student@demo.com', pass: 'Demo@1234', icon: GraduationCap },
+    { role: 'Recruiter', email: 'recruiter@demo.com', pass: 'Demo@1234', icon: Briefcase },
+    { role: 'Admin', email: 'admin@demo.com', pass: 'Demo@1234', icon: ShieldCheck },
   ];
 
-  const handleFill = (email: string, pass: string) => {
+  const handleFill = (email: string, pass: string, roleName: string) => {
+    setSelectedDemo(roleName);
     setValue('email', email, { shouldValidate: true });
     setValue('password', pass, { shouldValidate: true });
     setServerError('');
@@ -82,20 +85,27 @@ function LoginForm() {
         </div>
       )}
 
-      {/* 1-Click Quick Demo Login Pill Buttons */}
-      <div className={styles.quickFillContainer}>
-        <span className={styles.quickFillTitle}>1-Click Demo Fill:</span>
-        <div className={styles.quickFillButtons}>
-          {DEMO_ACCOUNTS.map((acc) => (
-            <button
-              key={acc.role}
-              type="button"
-              className={styles.quickFillBtn}
-              onClick={() => handleFill(acc.email, acc.pass)}
-            >
-              {acc.badge}
-            </button>
-          ))}
+      {/* Role-Card Style 1-Click Demo Fill */}
+      <div className={styles.roleSection}>
+        <p className={styles.roleLabel}>1-Click Demo Fill:</p>
+        <div className={styles.roleGrid}>
+          {DEMO_ACCOUNTS.map((acc) => {
+            const Icon = acc.icon;
+            const isSelected = selectedDemo === acc.role;
+            return (
+              <button
+                key={acc.role}
+                type="button"
+                className={clsx(styles.roleCard, isSelected && styles.roleCardActive)}
+                onClick={() => handleFill(acc.email, acc.pass, acc.role)}
+                aria-pressed={isSelected}
+                id={`demo-${acc.role.toLowerCase()}`}
+              >
+                <Icon size={20} />
+                <span className={styles.roleCardLabel}>{acc.role}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
