@@ -40,9 +40,9 @@ export default async function AdminDashboardPage() {
     <div className={styles.container}>
       <div className={styles.header}>
         <div>
-          <h1 className={styles.title}>TPO Placement Command Center</h1>
+          <h1 className={styles.title}>TPO Placement Overview</h1>
           <p className={styles.subtitle}>
-            Institutional overview of active campus drives, student placement rates, and recruiting partners.
+            Check active campus drives, current student placement numbers, and hiring company updates in one dashboard.
           </p>
         </div>
       </div>

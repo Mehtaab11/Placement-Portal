@@ -138,9 +138,9 @@ export default function StudentProfilePage() {
     <div className={styles.container}>
       <div className={styles.header}>
         <div>
-          <h1 className={styles.title}>Student Profile & Placement Resume</h1>
+          <h1 className={styles.title}>Student Profile & Resume</h1>
           <p className={styles.subtitle}>
-            Your profile details and verified academic stats determine your drive eligibility.
+            Keep your personal info, academic grades, and resume updated to qualify for all placement drives.
           </p>
         </div>
       </div>

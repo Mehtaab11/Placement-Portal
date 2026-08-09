@@ -24,8 +24,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
               The Future of<br />Campus Placements.
             </h1>
             <p className={styles.brandDesc}>
-              A unified command center bridging the gap between ambitious students,
-              top-tier recruiters, and institutional administration.
+              Connect college students, recruiting companies, and placement officers in one easy place to organize campus hiring, track applications, and secure job offers.
             </p>
           </div>
           <div className={styles.stats}>

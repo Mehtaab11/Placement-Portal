@@ -63,7 +63,7 @@ export default function StudentDirectoryClient({ initialStudents }: { initialStu
         <div>
           <h1 className={styles.title}>Master Student Directory</h1>
           <p className={styles.subtitle}>
-            Filter candidate records, inspect placement histories, and export institutional cohorts.
+            Search and filter student records, check their placement status, and export the student directory to CSV.
           </p>
         </div>
 
@@ -72,7 +72,7 @@ export default function StudentDirectoryClient({ initialStudents }: { initialStu
         </Button>
       </div>
 
-      {/* Filter Bar */}
+      {/* Compact Side-by-Side Filter Bar */}
       <div className={styles.filterBar}>
         <div className={styles.searchBox}>
           <Search size={16} className={styles.searchIcon} />
@@ -85,28 +85,36 @@ export default function StudentDirectoryClient({ initialStudents }: { initialStu
           />
         </div>
 
-        <select
-          value={branchFilter}
-          onChange={(e) => setBranchFilter(e.target.value)}
-          className={styles.select}
-        >
-          <option value="ALL">All Branches</option>
-          <option value="CSE">CSE</option>
-          <option value="IT">IT</option>
-          <option value="ECE">ECE</option>
-          <option value="MECH">MECH</option>
-          <option value="CIVIL">CIVIL</option>
-        </select>
+        <div className={styles.filterGroup}>
+          <div className={styles.selectWrapper}>
+            <select
+              value={branchFilter}
+              onChange={(e) => setBranchFilter(e.target.value)}
+              className={styles.select}
+              aria-label="Filter by branch"
+            >
+              <option value="ALL">All Branches</option>
+              <option value="CSE">CSE</option>
+              <option value="IT">IT</option>
+              <option value="ECE">ECE</option>
+              <option value="MECH">MECH</option>
+              <option value="CIVIL">CIVIL</option>
+            </select>
+          </div>
 
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className={styles.select}
-        >
-          <option value="ALL">All Placement Statuses</option>
-          <option value="PLACED">Placed Only</option>
-          <option value="UNPLACED">Seeking Placement</option>
-        </select>
+          <div className={styles.selectWrapper}>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className={styles.select}
+              aria-label="Filter by placement status"
+            >
+              <option value="ALL">All Placement Statuses</option>
+              <option value="PLACED">Placed Only</option>
+              <option value="UNPLACED">Seeking Placement</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       {/* Student Table */}

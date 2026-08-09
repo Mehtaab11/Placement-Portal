@@ -15,7 +15,7 @@
   cursor: pointer;
   transition: border-color var(--transition-base), box-shadow var(--transition-base);
 }
-.select:focus { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(249,115,22,0.12); outline: none; }
+.select:focus { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.12); outline: none; }
 .select.error { border-color: var(--color-error); }
 .chevron { position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--color-text-tertiary); pointer-events: none; }
 .errorText { font-size: var(--text-xs); color: var(--color-error); font-weight: var(--weight-medium); }

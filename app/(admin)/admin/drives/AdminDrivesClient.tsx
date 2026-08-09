@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import styles from './adminDrives.module.css';
-import { Search, Briefcase, CheckCircle2, Users, Award, Eye, Calendar, DollarSign, MapPin } from 'lucide-react';
+import Link from 'next/link';
+import { Search, Briefcase, CheckCircle2, Users, Award, Eye, Calendar, DollarSign, MapPin, Plus } from 'lucide-react';
 import { Drawer } from '@/components/ui/Drawer/Drawer';
+import { Button } from '@/components/ui/Button/Button';
 import { formatDate } from '@/lib/utils';
+import styles from './adminDrives.module.css';
 
 interface DriveItem {
   id: string;
@@ -77,9 +79,15 @@ export function AdminDrivesClient({
         <div>
           <h1 className={styles.title}>Campus Placement Drives</h1>
           <p className={styles.subtitle}>
-            Overview of all ongoing corporate recruitment campaigns and candidate traction.
+            Manage campus hiring drives, review applicant numbers, and track job offers for all companies.
           </p>
         </div>
+
+        <Link href="/admin/drives/new" style={{ textDecoration: 'none' }}>
+          <Button icon={<Plus size={16} />} id="admin-post-drive-btn">
+            Post Placement Drive
+          </Button>
+        </Link>
       </div>
 
       {/* KPI Metrics */}
@@ -142,6 +150,7 @@ export function AdminDrivesClient({
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
           className={styles.select}
+          aria-label="Filter by drive status"
         >
           <option value="ALL">All Statuses ({drives.length})</option>
           <option value="LIVE">Live ({drives.filter((d) => d.status === 'LIVE').length})</option>

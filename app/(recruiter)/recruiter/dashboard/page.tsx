@@ -47,10 +47,10 @@ export default async function RecruiterDashboardPage() {
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>
-            {recruiter?.company?.name ? `${recruiter.company.name} Recruiting Center` : 'Recruiter Dashboard'}
+            {recruiter?.company?.name ? `${recruiter.company.name} Hiring Desk` : 'Recruiter Dashboard'}
           </h1>
           <p className={styles.subtitle}>
-            Manage your on-campus recruitment pipeline, candidate reviews, and interview schedules.
+            Manage active campus hiring drives, review student applications, and organize candidate interview rounds.
           </p>
         </div>
 

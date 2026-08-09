@@ -22,7 +22,7 @@ export default async function AdminCompaniesPage() {
         <div>
           <h1 className={styles.title}>Partner Companies & Recruiters</h1>
           <p className={styles.subtitle}>
-            Onboarded hiring partners, active recruitment drives, and recruiter credentials.
+            Browse registered hiring companies, review their live placement drives, and manage recruiter account details.
           </p>
         </div>
       </div>

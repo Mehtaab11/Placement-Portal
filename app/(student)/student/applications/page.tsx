@@ -35,9 +35,9 @@ export default async function StudentApplicationsPage() {
     <div className={styles.container}>
       <div className={styles.header}>
         <div>
-          <h1 className={styles.title}>My Applications Tracker</h1>
+          <h1 className={styles.title}>My Applications</h1>
           <p className={styles.subtitle}>
-            Live round progression, shortlist statuses, and interview schedules.
+            Track your application status, interview schedules, and shortlisted results for every campus drive.
           </p>
         </div>
       </div>

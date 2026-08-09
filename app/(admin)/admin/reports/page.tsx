@@ -36,9 +36,9 @@ export default async function AdminReportsPage() {
     <div className={styles.container}>
       <div className={styles.header}>
         <div>
-          <h1 className={styles.title}>Placement Reports & Institutional Analytics</h1>
+          <h1 className={styles.title}>Placement Analytics & Reports</h1>
           <p className={styles.subtitle}>
-            Summary metrics, salary distribution benchmarks, and department-wise placement rates.
+            Track placement percentages, salary packages, and branch statistics across the current academic season.
           </p>
         </div>
       </div>

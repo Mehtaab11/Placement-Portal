@@ -79,28 +79,28 @@
   --z-modal:   400;
   --z-toast:   500;
 
-  /* ─── Light Mode Tokens (Default) ────────────────────────────────────────── */
-  --color-bg:           #FAFAFA;
-  --color-bg-secondary: #F4F4F5;
-  --color-bg-tertiary:  #E4E4E7;
+  /* ─── Light Mode Tokens (Default - Soft, Modern, Eye-friendly) ────────── */
+  --color-bg:           #F4F6FB;
+  --color-bg-secondary: #EBF0F8;
+  --color-bg-tertiary:  #DEE5F0;
   --color-surface:      #FFFFFF;
-  --color-surface-hover:#F4F4F5;
-  --color-border:       #E4E4E7;
-  --color-border-strong:#D4D4D8;
+  --color-surface-hover:#F7FAFD;
+  --color-border:       #E2E8F0;
+  --color-border-strong:#CBD5E1;
 
   /* Text */
-  --color-text-primary:   #18181B;
-  --color-text-secondary: #71717A;
-  --color-text-tertiary:  #A1A1AA;
-  --color-text-on-dark:   #FAFAFA;
+  --color-text-primary:   #0F172A;
+  --color-text-secondary: #475569;
+  --color-text-tertiary:  #64748B;
+  --color-text-on-dark:   #F8FAFC;
 
-  /* Confident Accent — Deep Indigo (#4F46E5) */
+  /* Confident Accent — Deep Indigo & Vibrant Royal Blue */
   --color-primary:        #4F46E5;
   --color-primary-hover:  #4338CA;
   --color-primary-light:  #EEF2FF;
   --color-primary-subtle: #E0E7FF;
 
-  /* Semantic Colors (Desaturated, Professional) */
+  /* Semantic Colors (Vibrant, Professional & Clear) */
   --color-success:        #059669;
   --color-success-light:  #ECFDF5;
   --color-success-border: #A7F3D0;
@@ -117,11 +117,11 @@
   --color-purple-light:   #F5F3FF;
 
   /* Dark Surface (Sidebar) */
-  --color-dark:           #121215;
-  --color-dark-secondary: #18181B;
-  --color-dark-border:    #27272A;
-  --color-dark-text:      #FAFAFA;
-  --color-dark-text-muted:#A1A1AA;
+  --color-dark:           #0F172A;
+  --color-dark-secondary: #1E293B;
+  --color-dark-border:    #334155;
+  --color-dark-text:      #F8FAFC;
+  --color-dark-text-muted:#94A3B8;
 
   /* Application Stage Colors */
   --color-stage-applied:      #4F46E5;
@@ -130,12 +130,12 @@
   --color-stage-offered:      #059669;
   --color-stage-rejected:     #DC2626;
 
-  /* Shadows (Light) */
-  --shadow-xs:  0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md:  0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
-  --shadow-lg:  0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
-  --shadow-xl:  0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  /* Shadows (Light - Soft Indigo/Slate Tinted Elevation) */
+  --shadow-xs:  0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-sm:  0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md:  0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
+  --shadow-lg:  0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.04);
+  --shadow-xl:  0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 10px 10px -5px rgba(15, 23, 42, 0.04);
 }
 
 /* ─── Dark Mode Tokens ─────────────────────────────────────────────────────── */

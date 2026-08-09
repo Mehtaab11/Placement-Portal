@@ -17,14 +17,14 @@
 
 .filterBar {
   display: flex;
-  gap: var(--space-4);
+  gap: var(--space-3);
   align-items: center;
   flex-wrap: wrap;
 }
 
 .searchBox {
   flex: 1;
-  min-width: 280px;
+  min-width: 260px;
   position: relative;
   display: flex;
   align-items: center;
@@ -34,6 +34,7 @@
   position: absolute;
   left: 0.75rem;
   color: var(--color-text-tertiary);
+  pointer-events: none;
 }
 
 .searchInput {
@@ -45,16 +46,47 @@
   background: var(--color-surface);
   font-size: var(--text-sm);
   color: var(--color-text-primary);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+.filterGroup {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.selectWrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
 }
 
 .select {
   height: 38px;
-  padding: 0 1.75rem 0 0.75rem;
+  padding: 0 2.25rem 0 0.85rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
-  background: var(--color-surface);
+  background: var(--color-surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 0.75rem center;
+  background-size: 14px;
   font-size: var(--text-sm);
   color: var(--color-text-primary);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
 }
 
 .tableCard {

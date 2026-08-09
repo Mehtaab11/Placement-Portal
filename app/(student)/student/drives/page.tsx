@@ -137,7 +137,7 @@ export default function StudentDrivesPage() {
         <div>
           <h1 className={styles.title}>Explore Placement Drives</h1>
           <p className={styles.subtitle}>
-            Browse verified on-campus opportunities and apply with your profile.
+            Browse verified campus hiring drives, check eligibility criteria, and submit your application with one click.
           </p>
         </div>
       </div>
@@ -160,6 +160,7 @@ export default function StudentDrivesPage() {
             value={branchFilter}
             onChange={(e) => setBranchFilter(e.target.value)}
             className={styles.filterSelect}
+            aria-label="Filter by branch"
           >
             <option value="ALL">All Branches</option>
             <option value="CSE">CSE</option>
@@ -173,6 +174,7 @@ export default function StudentDrivesPage() {
             value={jobTypeFilter}
             onChange={(e) => setJobTypeFilter(e.target.value)}
             className={styles.filterSelect}
+            aria-label="Filter by job type"
           >
             <option value="ALL">All Job Types</option>
             <option value="FULL_TIME">Full-time</option>

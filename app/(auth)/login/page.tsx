@@ -16,16 +16,30 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') ?? '';
+  const roleParam = searchParams.get('role');
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState('');
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
   });
+
+  const DEMO_ACCOUNTS = [
+    { role: 'Student', email: 'student@demo.com', pass: 'Demo@1234', badge: '🎓 Student' },
+    { role: 'Recruiter', email: 'recruiter@demo.com', pass: 'Demo@1234', badge: '💼 Recruiter' },
+    { role: 'Admin', email: 'admin@demo.com', pass: 'Demo@1234', badge: '🛡️ Admin' },
+  ];
+
+  const handleFill = (email: string, pass: string) => {
+    setValue('email', email, { shouldValidate: true });
+    setValue('password', pass, { shouldValidate: true });
+    setServerError('');
+  };
 
   const onSubmit = async (data: LoginInput) => {
     setServerError('');
@@ -36,7 +50,7 @@ function LoginForm() {
     });
 
     if (result?.error) {
-      setServerError('Invalid email or password. Please try again.');
+      setServerError('Invalid email or password. Please try again or use a 1-click demo button below.');
       return;
     }
 
@@ -59,7 +73,7 @@ function LoginForm() {
     <div className={styles.wrapper}>
       <div className={styles.header}>
         <h1 className={styles.title}>Welcome back</h1>
-        <p className={styles.subtitle}>Sign in to your TPO Portal account</p>
+        <p className={styles.subtitle}>Enter your login details to access your portal account</p>
       </div>
 
       {serverError && (
@@ -67,6 +81,23 @@ function LoginForm() {
           {serverError}
         </div>
       )}
+
+      {/* 1-Click Quick Demo Login Pill Buttons */}
+      <div className={styles.quickFillContainer}>
+        <span className={styles.quickFillTitle}>1-Click Demo Fill:</span>
+        <div className={styles.quickFillButtons}>
+          {DEMO_ACCOUNTS.map((acc) => (
+            <button
+              key={acc.role}
+              type="button"
+              className={styles.quickFillBtn}
+              onClick={() => handleFill(acc.email, acc.pass)}
+            >
+              {acc.badge}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form} noValidate>
         <Input
@@ -120,16 +151,6 @@ function LoginForm() {
       <Link href="/register" className={styles.registerLink}>
         Create an account
       </Link>
-
-      {/* Demo credentials hint */}
-      <div className={styles.demoHint}>
-        <p className={styles.demoTitle}>Demo credentials (after seeding)</p>
-        <div className={styles.demoRows}>
-          <span>Student: student@demo.com / Demo@1234</span>
-          <span>Recruiter: recruiter@demo.com / Demo@1234</span>
-          <span>Admin: admin@demo.com / Demo@1234</span>
-        </div>
-      </div>
     </div>
   );
 }
