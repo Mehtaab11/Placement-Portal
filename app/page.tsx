@@ -144,7 +144,7 @@ export default function HomePage() {
       <section className={styles.hero}>
         <div className={styles.heroChip}>
           <span className={styles.chipDot} aria-hidden="true" />
-          TPO Portal is Live
+          Placement Session 2026-27
         </div>
         <h1 className={styles.heroTitle}>
           The Future of
