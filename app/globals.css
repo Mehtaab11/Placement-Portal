@@ -214,6 +214,10 @@ html.theme-transitioning *::after {
   padding: 0;
 }
 
+dialog {
+  margin: auto;
+}
+
 html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;

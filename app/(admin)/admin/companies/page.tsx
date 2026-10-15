@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import { Building2, Globe, CheckCircle2, ShieldCheck } from 'lucide-react';
 import styles from './companies.module.css';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminCompaniesPage() {
   const session = await auth();
   if (!session || session.user.role !== 'ADMIN') redirect('/login');

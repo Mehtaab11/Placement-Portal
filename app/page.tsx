@@ -17,6 +17,10 @@ import {
   Clock,
   Send,
   MessageSquare,
+  Building2,
+  Landmark,
+  Sparkles,
+  CheckCircle2,
 } from "lucide-react";
 import styles from "./page.module.css";
 import type { Metadata } from "next";
@@ -97,7 +101,7 @@ const ROLES = [
 export default function HomePage() {
   return (
     <div className={styles.page}>
-      {/* Nav */}
+      {/* ─── Nav ─────────────────────────────────────────────────── */}
       <nav className={styles.nav}>
         <div className={styles.navLogo}>
           <Image
@@ -119,6 +123,9 @@ export default function HomePage() {
           <span className={styles.navLogoText}>TPO Portal</span>
         </div>
         <div className={styles.navLinks}>
+          <a href="#showcase" className={styles.navLink}>
+            Campus Cell
+          </a>
           <a href="#features" className={styles.navLink}>
             Features
           </a>
@@ -140,51 +147,119 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* Hero */}
+      {/* ─── Hero Section with Visual Showcase ──────────────────── */}
       <section className={styles.hero}>
-        <div className={styles.heroChip}>
-          <span className={styles.chipDot} aria-hidden="true" />
-          Placement Session 2026-27
+        <div className={styles.heroHeader}>
+          <div className={styles.heroChip}>
+            <span className={styles.chipDot} aria-hidden="true" />
+            Placement Session 2026-27
+          </div>
+          <h1 className={styles.heroTitle}>
+            The Future of
+            <br />
+            <span className={styles.heroAccent}>Campus Placements.</span>
+          </h1>
+          <p className={styles.heroDesc}>
+            A unified platform connecting ambitious students, top-tier recruiters,
+            and college placement administration. Streamline drives, track analytics,
+            and accelerate campus careers.
+          </p>
+          <div className={styles.heroActions}>
+            <Link
+              href="/login?role=STUDENT"
+              className={styles.heroBtnRole}
+              id="hero-student-login"
+            >
+              <GraduationCap size={18} />
+              Student Login
+            </Link>
+            <Link
+              href="/login?role=RECRUITER"
+              className={styles.heroBtnRole}
+              id="hero-recruiter-login"
+            >
+              <Briefcase size={18} />
+              Recruiter Access
+            </Link>
+            <Link
+              href="/login?role=ADMIN"
+              className={styles.heroBtnRole}
+              id="hero-admin-login"
+            >
+              <ShieldCheck size={16} />
+              TPO Admin
+            </Link>
+          </div>
         </div>
-        <h1 className={styles.heroTitle}>
-          The Future of
-          <br />
-          <span className={styles.heroAccent}>Campus Placements.</span>
-        </h1>
-        <p className={styles.heroDesc}>
-          A simple and reliable platform connecting college students, company
-          recruiters, and placement officers to organize campus drives, track
-          application stages, and secure job offers.
-        </p>
-        <div className={styles.heroActions}>
-          <Link
-            href="/login?role=STUDENT"
-            className={styles.heroBtnRole}
-            id="hero-student-login"
-          >
-            <GraduationCap size={18} />
-            Student Login
-          </Link>
-          <Link
-            href="/login?role=RECRUITER"
-            className={styles.heroBtnRole}
-            id="hero-recruiter-login"
-          >
-            <Briefcase size={18} />
-            Recruiter Access
-          </Link>
-          <Link
-            href="/login?role=ADMIN"
-            className={styles.heroBtnRole}
-            id="hero-admin-login"
-          >
-            <ShieldCheck size={16} />
-            TPO Admin
-          </Link>
+
+        {/* ─── Grand Visual Campus Showcase Frame ───────────────── */}
+        <div className={styles.heroShowcase}>
+          <div className={styles.heroShowcaseGlow} aria-hidden="true" />
+          <div className={styles.heroFrame}>
+            <div className={styles.heroFrameHeader}>
+              <div className={styles.windowControls} aria-hidden="true">
+                <span className={styles.dotRed} />
+                <span className={styles.dotYellow} />
+                <span className={styles.dotGreen} />
+              </div>
+              <div className={styles.frameAddressBar}>
+                <Building2 size={13} className={styles.frameIcon} />
+                <span>university.tpo.portal / campus-placement-cell</span>
+              </div>
+              <div className={styles.frameBadge}>
+                <span className={styles.liveDot} />
+                <span>Live Campus Hub</span>
+              </div>
+            </div>
+
+            <div className={styles.heroImgWrapper}>
+              <Image
+                src="/campus-placement-cell.jpg"
+                alt="University Placement Cell Campus and Students"
+                width={1200}
+                height={680}
+                className={styles.heroImg}
+                priority
+              />
+              <div className={styles.heroOverlay} />
+
+              {/* Floating Glassmorphic Badges */}
+              <div className={styles.tagTopLeft}>
+                <div className={styles.tagIconWrapper}>
+                  <Building2 size={16} />
+                </div>
+                <div>
+                  <div className={styles.tagHeading}>University Placement Cell</div>
+                  <div className={styles.tagSubtext}>Admin Block • Room 204</div>
+                </div>
+              </div>
+
+              <div className={styles.tagTopRight}>
+                <span className={styles.pulseGreenDot} />
+                <span>Hiring Season 2026-27 Active</span>
+              </div>
+
+              <div className={styles.tagBottomLeft}>
+                <div className={styles.tagNumber}>4,200+</div>
+                <div className={styles.tagTextWrap}>
+                  <div className={styles.tagTitle}>Registered Candidates</div>
+                  <div className={styles.tagSub}>CSE • IT • ECE • MECH • CIVIL</div>
+                </div>
+              </div>
+
+              <div className={styles.tagBottomRight}>
+                <div className={styles.tagNumber}>150+</div>
+                <div className={styles.tagTextWrap}>
+                  <div className={styles.tagTitle}>Hiring Partners</div>
+                  <div className={styles.tagSub}>Top Tech, Finance & Core Corporates</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Stats */}
+      {/* ─── Stats ──────────────────────────────────────────────── */}
       <section
         className={styles.stats}
         id="stats"
@@ -219,7 +294,71 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features */}
+      {/* ─── Dedicated Campus Placement Ecosystem Showcase ───────── */}
+      <section
+        className={styles.showcaseSection}
+        id="showcase"
+        aria-label="University Placement Cell Facility"
+      >
+        <div className={styles.showcaseContainer}>
+          <div className={styles.showcaseVisual}>
+            <Image
+              src="/campus-placement-cell.jpg"
+              alt="Students outside University Placement Cell"
+              width={700}
+              height={450}
+              className={styles.showcaseImg}
+            />
+            <div className={styles.showcaseFloatingBadge}>
+              <div className={styles.badgeIconBox}>
+                <Landmark size={20} />
+              </div>
+              <div>
+                <div className={styles.badgeTitle}>University Training & Placement Cell</div>
+                <div className={styles.badgeSub}>Modern Infrastructure & Dedicated Interview Suites</div>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.showcaseContent}>
+            <div className={styles.showcaseTag}>
+              <Sparkles size={14} />
+              <span>Campus Career Hub</span>
+            </div>
+            <h2 className={styles.showcaseHeading}>
+              Where Academic Potential Meets Global Opportunity
+            </h2>
+            <p className={styles.showcaseParagraph}>
+              Our state-of-the-art campus placement facility bridges the gap between students,
+              placement officers, and corporate talent acquisition teams. Equipped with modern
+              interview suites, online assessment labs, and direct guidance desks.
+            </p>
+
+            <div className={styles.showcasePerksList}>
+              <div className={styles.showcasePerk}>
+                <CheckCircle2 size={18} className={styles.perkIcon} />
+                <span>Dedicated on-campus interview suites & group discussion halls</span>
+              </div>
+              <div className={styles.showcasePerk}>
+                <CheckCircle2 size={18} className={styles.perkIcon} />
+                <span>Instant resume verification and automated eligibility screening</span>
+              </div>
+              <div className={styles.showcasePerk}>
+                <CheckCircle2 size={18} className={styles.perkIcon} />
+                <span>Direct corporate collaboration with 150+ visiting industry leaders</span>
+              </div>
+            </div>
+
+            <div className={styles.showcaseActions}>
+              <Link href="/register" className={styles.showcasePrimaryBtn}>
+                Join Campus Placement Portal <ArrowRight size={15} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Features ───────────────────────────────────────────── */}
       <section
         className={styles.features}
         id="features"
@@ -254,7 +393,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Role cards */}
+      {/* ─── Role Cards ─────────────────────────────────────────── */}
       <section
         className={styles.roles}
         id="roles"
@@ -305,7 +444,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Contact Section */}
+      {/* ─── Contact Section ────────────────────────────────────── */}
       <section
         className={styles.contact}
         id="contact"
@@ -402,7 +541,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* ─── Footer ─────────────────────────────────────────────── */}
       <footer className={styles.footer}>
         <div className={styles.footerLeft}>
           <div className={styles.footerBrandRow}>
@@ -428,6 +567,9 @@ export default function HomePage() {
           </p>
         </div>
         <div className={styles.footerLinks}>
+          <a href="#showcase" className={styles.footerLink}>
+            Campus Cell
+          </a>
           <a href="#features" className={styles.footerLink}>
             Features
           </a>

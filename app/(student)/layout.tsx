@@ -18,11 +18,20 @@ export default async function StudentLayout({ children }: { children: ReactNode 
 
   const displayName = profile?.fullName || session.user.name || session.user.email;
 
+  // Fetch tier for nav badge — only when subscriptions feature is enabled
+  let tier: string | undefined;
+  if (process.env.NEXT_PUBLIC_SUBSCRIPTIONS_ENABLED === 'true') {
+    const { getStudentEntitlements } = await import('@/lib/subscription/entitlements');
+    const ent = await getStudentEntitlements(session.user.id);
+    tier = ent.tier;
+  }
+
   return (
     <div className={styles.shell}>
       <AppSidebar
         role="STUDENT"
         userName={displayName}
+        tier={tier}
       />
       <div className={styles.main}>
         <AppHeader

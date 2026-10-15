@@ -318,6 +318,266 @@ async function main() {
     ],
   });
 
+  // ─── Subscription Plans (Idempotent Upsert) ──────────────────────────────────
+  const plansData = [
+    {
+      id: 'plan_pro_monthly',
+      slug: 'pro-monthly',
+      name: 'Pro Monthly',
+      tier: 'PRO' as const,
+      description: 'Ideal for active job hunting. Full access to mock packages and self-practice video interviews.',
+      durationDays: 30,
+      pricePaise: 49900, // ₹499
+      sortOrder: 1,
+      features: {
+        mockTestsPerMonth: 25,
+        videoInterviewsPerMonth: 8,
+        premiumPackages: true,
+        detailedExplanations: true,
+        reviewedVideoFeedback: false,
+        prioritySupport: false,
+      },
+      isActive: true,
+    },
+    {
+      id: 'plan_premium_monthly',
+      slug: 'premium-monthly',
+      name: 'Premium Monthly',
+      tier: 'PREMIUM' as const,
+      description: 'The ultimate placement prep suite with mentor reviewed mock video interviews.',
+      durationDays: 30,
+      pricePaise: 99900, // ₹999
+      sortOrder: 2,
+      features: {
+        mockTestsPerMonth: 100,
+        videoInterviewsPerMonth: 25,
+        premiumPackages: true,
+        detailedExplanations: true,
+        reviewedVideoFeedback: true,
+        prioritySupport: true,
+      },
+      isActive: true,
+    },
+    {
+      id: 'plan_pro_yearly',
+      slug: 'pro-yearly',
+      name: 'Pro Annual (Discounted)',
+      tier: 'PRO' as const,
+      description: 'Comprehensive 1-year prep pack with 33% savings for pre-final & final year students.',
+      durationDays: 365,
+      pricePaise: 399900, // ₹3,999
+      sortOrder: 3,
+      features: {
+        mockTestsPerMonth: 30,
+        videoInterviewsPerMonth: 10,
+        premiumPackages: true,
+        detailedExplanations: true,
+        reviewedVideoFeedback: false,
+        prioritySupport: true,
+      },
+      isActive: true,
+    },
+  ];
+
+  for (const p of plansData) {
+    await prisma.plan.upsert({
+      where: { slug: p.slug },
+      update: p,
+      create: p,
+    });
+  }
+  console.log('✅ 3 Subscription Plans seeded');
+
+  // ─── Mock Test Packages & Tests (Idempotent) ──────────────────────────────
+  const pkg1 = await prisma.mockTestPackage.upsert({
+    where: { slug: 'aptitude-foundations' },
+    update: {},
+    create: {
+      title: 'General Aptitude & Logical Reasoning Foundations',
+      slug: 'aptitude-foundations',
+      description: 'Master time & work, permutations, probability, and logical syllogisms required for initial screening rounds.',
+      category: 'APTITUDE',
+      difficulty: 'EASY',
+      requiredTier: null, // Free Preview Package
+      isPublished: true,
+      sortOrder: 1,
+    },
+  });
+
+  const test1 = await prisma.mockTest.upsert({
+    where: { id: 'test_aptitude_diag_01' },
+    update: {},
+    create: {
+      id: 'test_aptitude_diag_01',
+      packageId: pkg1.id,
+      title: 'Quantitative & Speed Math Diagnostic',
+      durationMinutes: 15,
+      totalMarks: 10,
+      negativeMarking: 0.25,
+      isFreePreview: true,
+      isPublished: true,
+    },
+  });
+
+  // 10 Sample Questions for Test 1
+  const test1Questions = [
+    { prompt: 'If 12 men can complete a project in 18 days, in how many days can 18 men complete the same project?', options: ['10 days', '12 days', '14 days', '16 days'], correctIndex: 1, explanation: 'M1 * D1 = M2 * D2 => 12 * 18 = 18 * D2 => D2 = 12.', marks: 1, section: 'Time & Work' },
+    { prompt: 'A train 240 m long passes a pole in 24 seconds. How long will it take to pass a platform 650 m long?', options: ['65 sec', '89 sec', '100 sec', '110 sec'], correctIndex: 1, explanation: 'Speed = 240/24 = 10 m/s. Total distance = 240 + 650 = 890m. Time = 890/10 = 89s.', marks: 1, section: 'Speed & Distance' },
+    { prompt: 'Two pipes A and B can fill a tank in 20 and 30 minutes respectively. If both open together, how long will it take?', options: ['10 min', '12 min', '15 min', '25 min'], correctIndex: 1, explanation: 'Net rate = 1/20 + 1/30 = 5/60 = 1/12 => 12 minutes.', marks: 1, section: 'Pipes & Cisterns' },
+    { prompt: 'What is the probability of getting a sum of 9 from two throws of a standard six-sided die?', options: ['1/6', '1/8', '1/9', '1/12'], correctIndex: 2, explanation: 'Favorable outcomes: (3,6), (4,5), (5,4), (6,3) = 4 outcomes out of 36 => 4/36 = 1/9.', marks: 1, section: 'Probability' },
+    { prompt: 'A shopkeeper marks goods 40% above cost price and allows a 20% discount. What is the profit percentage?', options: ['12%', '15%', '18%', '20%'], correctIndex: 0, explanation: 'Let CP = 100. MP = 140. SP = 140 * 0.8 = 112 => Profit = 12%.', marks: 1, section: 'Profit & Loss' },
+    { prompt: 'Find the odd one out: 3, 5, 7, 12, 17, 19', options: ['3', '7', '12', '17'], correctIndex: 2, explanation: 'All other numbers are prime; 12 is composite.', marks: 1, section: 'Number Series' },
+    { prompt: 'If TODAY is coded as UQECA, what is the code for NIGHT?', options: ['OJIIU', 'OJHIU', 'OKJIU', 'OKHIU'], correctIndex: 0, explanation: '+1, +2, +3, +4, +5 pattern.', marks: 1, section: 'Coding Decoding' },
+    { prompt: 'A car covers a distance at 60 km/h and returns at 40 km/h. What is the average speed for the round trip?', options: ['48 km/h', '50 km/h', '52 km/h', '54 km/h'], correctIndex: 0, explanation: 'Harmonic mean: 2 * 60 * 40 / (60 + 40) = 4800 / 100 = 48 km/h.', marks: 1, section: 'Average Speed' },
+    { prompt: 'What is 35% of 180 + 18% of 350?', options: ['112', '126', '135', '144'], correctIndex: 1, explanation: '35% of 180 = 63; 18% of 350 = 63. Total = 63 + 63 = 126.', marks: 1, section: 'Percentages' },
+    { prompt: 'Pointing to a photo, a man says "He is the son of the only daughter of my father". Who is in the photo?', options: ['Brother', 'Nephew / Son', 'Uncle', 'Cousin'], correctIndex: 1, explanation: 'The daughter of his father is his sister. Her son is his nephew.', marks: 1, section: 'Blood Relations' },
+  ];
+
+  for (let i = 0; i < test1Questions.length; i++) {
+    const q = test1Questions[i];
+    await prisma.mockQuestion.upsert({
+      where: { id: `q_aptitude_${i + 1}` },
+      update: {},
+      create: {
+        id: `q_aptitude_${i + 1}`,
+        testId: test1.id,
+        prompt: q.prompt,
+        options: q.options,
+        correctIndex: q.correctIndex,
+        explanation: q.explanation,
+        marks: q.marks,
+        section: q.section,
+        order: i + 1,
+      },
+    });
+  }
+
+  // Gated Pro Package
+  const pkg2 = await prisma.mockTestPackage.upsert({
+    where: { slug: 'faang-core-cs-sprint' },
+    update: {},
+    create: {
+      title: 'Top Product Tier DSA & Core Computer Science',
+      slug: 'faang-core-cs-sprint',
+      description: 'Advanced data structures, time complexity analysis, DBMS transactions, and OS threading concepts.',
+      category: 'TECHNICAL',
+      difficulty: 'HARD',
+      requiredTier: 'PRO',
+      isPublished: true,
+      sortOrder: 2,
+    },
+  });
+
+  const test2 = await prisma.mockTest.upsert({
+    where: { id: 'test_dsa_core_01' },
+    update: {},
+    create: {
+      id: 'test_dsa_core_01',
+      packageId: pkg2.id,
+      title: 'Data Structures & Algorithms MCQ Sprint',
+      durationMinutes: 20,
+      totalMarks: 10,
+      negativeMarking: 0.25,
+      isFreePreview: false,
+      isPublished: true,
+    },
+  });
+
+  const test2Questions = [
+    { prompt: 'What is the amortized time complexity of inserting n elements into a dynamic array (like std::vector or ArrayList)?', options: ['O(n^2)', 'O(n log n)', 'O(n)', 'O(1)'], correctIndex: 2, explanation: 'Total time for n insertions is O(n), giving O(1) amortized per insert.', marks: 1, section: 'Data Structures' },
+    { prompt: 'Which of the following sorting algorithms is NOT stable by default?', options: ['Merge Sort', 'Insertion Sort', 'Quick Sort', 'Bubble Sort'], correctIndex: 2, explanation: 'Standard Quick Sort does not preserve relative order of equal keys.', marks: 1, section: 'Algorithms' },
+    { prompt: 'In a Red-Black Tree with n nodes, what is the maximum height of the tree?', options: ['log2(n)', '2 * log2(n + 1)', 'n / 2', 'sqrt(n)'], correctIndex: 1, explanation: 'The height of a Red-Black tree is at most 2 * log2(n + 1).', marks: 1, section: 'Trees' },
+    { prompt: 'Which ACID property guarantees that concurrent transactions do not interfere with each other?', options: ['Atomicity', 'Consistency', 'Isolation', 'Durability'], correctIndex: 2, explanation: 'Isolation ensures concurrent transaction execution produces equivalent serialized state.', marks: 1, section: 'DBMS' },
+    { prompt: 'What condition is NOT necessary for a deadlock in an operating system?', options: ['Mutual Exclusion', 'Hold and Wait', 'Preemption Allowed', 'Circular Wait'], correctIndex: 2, explanation: 'No Preemption is required for deadlock; preemption prevents deadlock.', marks: 1, section: 'Operating Systems' },
+    { prompt: 'What is the time complexity to find the shortest path in an unweighted graph with V vertices and E edges using BFS?', options: ['O(V * E)', 'O(V + E)', 'O(E log V)', 'O(V^2)'], correctIndex: 1, explanation: 'BFS runs in O(V + E) time on adjacency lists.', marks: 1, section: 'Graphs' },
+    { prompt: 'What data structure is typically used to implement LRU (Least Recently Used) cache with O(1) operations?', options: ['Binary Search Tree', 'Hash Map + Doubly Linked List', 'Max Heap + Array', 'Stack + Queue'], correctIndex: 1, explanation: 'Hash Map gives O(1) lookup while Doubly Linked List provides O(1) removal and insertion.', marks: 1, section: 'System Design' },
+    { prompt: 'Which CPU scheduling algorithm is proven to achieve the minimum average waiting time?', options: ['First Come First Serve', 'Round Robin', 'Shortest Job First (SJF)', 'Priority Scheduling'], correctIndex: 2, explanation: 'SJF is optimal and gives minimum average waiting time for a given set of stationary processes.', marks: 1, section: 'Operating Systems' },
+    { prompt: 'In TCP 3-way handshake, what is the sequence of flags exchanged?', options: ['SYN, ACK, SYN-ACK', 'SYN, SYN-ACK, ACK', 'ACK, SYN, ACK', 'FIN, ACK, FIN-ACK'], correctIndex: 1, explanation: 'Client sends SYN, server replies SYN-ACK, client sends ACK.', marks: 1, section: 'Computer Networks' },
+    { prompt: 'What is the space complexity of topological sort on a Directed Acyclic Graph (DAG) with V vertices?', options: ['O(1)', 'O(log V)', 'O(V)', 'O(V^2)'], correctIndex: 2, explanation: 'Requires O(V) auxiliary space for visited array and recursion stack / queue.', marks: 1, section: 'Algorithms' },
+  ];
+
+  for (let i = 0; i < test2Questions.length; i++) {
+    const q = test2Questions[i];
+    await prisma.mockQuestion.upsert({
+      where: { id: `q_dsa_${i + 1}` },
+      update: {},
+      create: {
+        id: `q_dsa_${i + 1}`,
+        testId: test2.id,
+        prompt: q.prompt,
+        options: q.options,
+        correctIndex: q.correctIndex,
+        explanation: q.explanation,
+        marks: q.marks,
+        section: q.section,
+        order: i + 1,
+      },
+    });
+  }
+  console.log('✅ 2 Mock Test Packages & 20 Questions seeded');
+
+  // ─── Video Interview Templates (Idempotent) ──────────────────────────────
+  await prisma.videoInterviewTemplate.upsert({
+    where: { id: 'tpl_sde_behavioral_01' },
+    update: {},
+    create: {
+      id: 'tpl_sde_behavioral_01',
+      title: 'SDE Behavioral & Leadership (STAR Method)',
+      domain: 'Software Engineering',
+      description: 'Practice behavioral interview responses using the Situation-Task-Action-Result structure.',
+      requiredTier: 'PRO',
+      isPublished: true,
+      questions: [
+        {
+          id: 'q_beh_1',
+          prompt: 'Describe a challenging technical disagreement you had with a team member or teammate and how you resolved it.',
+          thinkSeconds: 20,
+          maxAnswerSeconds: 90,
+        },
+        {
+          id: 'q_beh_2',
+          prompt: 'Tell me about a time you had to deliver a software project under a tight deadline with incomplete specifications.',
+          thinkSeconds: 20,
+          maxAnswerSeconds: 90,
+        },
+        {
+          id: 'q_beh_3',
+          prompt: 'Explain a technical mistake you made in production or a past project. What did you learn and how did you mitigate it?',
+          thinkSeconds: 25,
+          maxAnswerSeconds: 120,
+        },
+      ],
+    },
+  });
+
+  await prisma.videoInterviewTemplate.upsert({
+    where: { id: 'tpl_frontend_arch_02' },
+    update: {},
+    create: {
+      id: 'tpl_frontend_arch_02',
+      title: 'Frontend Architecture & Web Performance Mock',
+      domain: 'Frontend Engineering',
+      description: 'Simulate high-bar technical screening on Core Web Vitals, state management, and SSR vs CSR trade-offs.',
+      requiredTier: 'PREMIUM',
+      isPublished: true,
+      questions: [
+        {
+          id: 'q_fe_1',
+          prompt: 'How would you diagnose and optimize a slow Largest Contentful Paint (LCP) and Interaction to Next Paint (INP) in a Next.js application?',
+          thinkSeconds: 30,
+          maxAnswerSeconds: 120,
+        },
+        {
+          id: 'q_fe_2',
+          prompt: 'Compare React Server Components (RSC) with traditional Client-Side Rendering. When would you strictly choose one over the other?',
+          thinkSeconds: 25,
+          maxAnswerSeconds: 120,
+        },
+      ],
+    },
+  });
+  console.log('✅ 2 Video Interview Templates seeded');
+
   console.log('\n✅ Seeding complete!');
   console.log('\n📧 Demo Login Credentials:');
   console.log('   Admin:     admin@demo.com / Demo@1234');

@@ -1,13 +1,20 @@
-import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
-import Link from 'next/link';
-import { redirect } from 'next/navigation';
-import { Briefcase, Users, CheckCircle, Calendar, Plus, ArrowRight } from 'lucide-react';
-import styles from './recruiterDashboard.module.css';
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import {
+  Briefcase,
+  Users,
+  CheckCircle,
+  Calendar,
+  Plus,
+  ArrowRight,
+} from "lucide-react";
+import styles from "./recruiterDashboard.module.css";
 
 export default async function RecruiterDashboardPage() {
   const session = await auth();
-  if (!session || session.user.role !== 'RECRUITER') redirect('/login');
+  if (!session || session.user.role !== "RECRUITER") redirect("/login");
 
   const recruiter = await prisma.recruiterProfile.findUnique({
     where: { userId: session.user.id },
@@ -20,25 +27,31 @@ export default async function RecruiterDashboardPage() {
         include: {
           applications: {
             include: { student: true },
-            orderBy: { appliedAt: 'desc' },
+            orderBy: { appliedAt: "desc" },
           },
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
       })
     : [];
 
-  const totalApplications = drives.reduce((acc, d) => acc + d.applications.length, 0);
+  const totalApplications = drives.reduce(
+    (acc, d) => acc + d.applications.length,
+    0,
+  );
   const totalShortlisted = drives.reduce(
-    (acc, d) => acc + d.applications.filter((a) => a.stage === 'SHORTLISTED').length,
-    0
+    (acc, d) =>
+      acc + d.applications.filter((a) => a.stage === "SHORTLISTED").length,
+    0,
   );
   const totalInterviews = drives.reduce(
-    (acc, d) => acc + d.applications.filter((a) => a.stage === 'INTERVIEW').length,
-    0
+    (acc, d) =>
+      acc + d.applications.filter((a) => a.stage === "INTERVIEW").length,
+    0,
   );
   const totalOffered = drives.reduce(
-    (acc, d) => acc + d.applications.filter((a) => a.stage === 'OFFERED').length,
-    0
+    (acc, d) =>
+      acc + d.applications.filter((a) => a.stage === "OFFERED").length,
+    0,
   );
 
   return (
@@ -47,10 +60,13 @@ export default async function RecruiterDashboardPage() {
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>
-            {recruiter?.company?.name ? `${recruiter.company.name} Hiring Desk` : 'Recruiter Dashboard'}
+            {recruiter?.company?.name
+              ? `${recruiter.company.name} Hiring Desk`
+              : "Recruiter Dashboard"}
           </h1>
           <p className={styles.subtitle}>
-            Manage active campus hiring drives, review student applications, and organize candidate interview rounds.
+            Manage active campus hiring drives, review student applications, and
+            organize candidate interview rounds.
           </p>
         </div>
 
@@ -62,7 +78,13 @@ export default async function RecruiterDashboardPage() {
       {/* KPI Stats */}
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: 'var(--color-primary-light)', color: 'var(--color-primary)' }}>
+          <div
+            className={styles.statIcon}
+            style={{
+              background: "var(--color-primary-light)",
+              color: "var(--color-primary)",
+            }}
+          >
             <Briefcase size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -72,7 +94,13 @@ export default async function RecruiterDashboardPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: 'var(--color-warning-light)', color: 'var(--color-warning)' }}>
+          <div
+            className={styles.statIcon}
+            style={{
+              background: "var(--color-warning-light)",
+              color: "var(--color-warning)",
+            }}
+          >
             <Users size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -82,7 +110,13 @@ export default async function RecruiterDashboardPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: 'var(--color-purple-light)', color: 'var(--color-purple)' }}>
+          <div
+            className={styles.statIcon}
+            style={{
+              background: "var(--color-purple-light)",
+              color: "var(--color-purple)",
+            }}
+          >
             <Calendar size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -92,7 +126,13 @@ export default async function RecruiterDashboardPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: 'var(--color-success-light)', color: 'var(--color-success)' }}>
+          <div
+            className={styles.statIcon}
+            style={{
+              background: "var(--color-success-light)",
+              color: "var(--color-success)",
+            }}
+          >
             <CheckCircle size={20} />
           </div>
           <div className={styles.statMeta}>
@@ -134,14 +174,20 @@ export default async function RecruiterDashboardPage() {
               <tbody>
                 {drives.map((d) => {
                   const apps = d.applications;
-                  const shortlisted = apps.filter((a) => a.stage === 'SHORTLISTED').length;
-                  const offered = apps.filter((a) => a.stage === 'OFFERED').length;
+                  const shortlisted = apps.filter(
+                    (a) => a.stage === "SHORTLISTED",
+                  ).length;
+                  const offered = apps.filter(
+                    (a) => a.stage === "OFFERED",
+                  ).length;
 
                   return (
                     <tr key={d.id}>
                       <td className={styles.tdTitle}>
                         <strong>{d.title}</strong>
-                        <span className={styles.tdSub}>₹{d.ctcMin}–{d.ctcMax} LPA • {d.location}</span>
+                        <span className={styles.tdSub}>
+                          ₹{d.ctcMin}–{d.ctcMax} LPA • {d.location}
+                        </span>
                       </td>
                       <td>
                         <span className={styles.badge} data-status={d.status}>
@@ -152,7 +198,10 @@ export default async function RecruiterDashboardPage() {
                       <td>{shortlisted}</td>
                       <td>{offered}</td>
                       <td>
-                        <Link href={`/recruiter/drives/${d.id}`} className={styles.actionLink}>
+                        <Link
+                          href={`/recruiter/drives/${d.id}`}
+                          className={styles.actionLink}
+                        >
                           Review Candidates →
                         </Link>
                       </td>

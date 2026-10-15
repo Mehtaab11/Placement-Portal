@@ -17,6 +17,9 @@ import {
   Plus,
   FileText,
   Bell,
+  BookOpen,
+  Video,
+  CreditCard,
 } from 'lucide-react';
 import type { Role } from '@prisma/client';
 
@@ -51,20 +54,33 @@ const NAV_BY_ROLE: Record<Role, NavItem[]> = {
   ],
 };
 
+const STUDENT_SUB_ITEMS: NavItem[] = [
+  { href: '/student/mock-tests', label: 'Mock Tests', icon: BookOpen },
+  { href: '/student/video-interviews', label: 'Video Interviews', icon: Video },
+  { href: '/student/subscription', label: 'Subscription', icon: CreditCard },
+];
+
+
 const CTA_BY_ROLE: Record<Role, { href: string; label: string } | null> = {
   STUDENT: null,
   RECRUITER: { href: '/recruiter/drives/new', label: 'Post New Drive' },
   ADMIN: { href: '/admin/drives/new', label: 'Post New Drive' },
 };
 
+const subscriptionsEnabled = process.env.NEXT_PUBLIC_SUBSCRIPTIONS_ENABLED === 'true';
+
 interface AppSidebarProps {
   role: Role;
   userName?: string;
+  tier?: string;
 }
 
-export function AppSidebar({ role, userName }: AppSidebarProps) {
+export function AppSidebar({ role, userName, tier }: AppSidebarProps) {
   const pathname = usePathname();
   const navItems = NAV_BY_ROLE[role];
+  const subNavItems = role === 'STUDENT' && subscriptionsEnabled
+    ? STUDENT_SUB_ITEMS
+    : [];
   const cta = CTA_BY_ROLE[role];
 
   return (
@@ -112,6 +128,29 @@ export function AppSidebar({ role, userName }: AppSidebarProps) {
             </Link>
           );
         })}
+        {subNavItems && subNavItems.length > 0 && (
+          <>
+            <div className={styles.navDivider} aria-hidden />
+            {subNavItems.map((item) => {
+              const Icon = item.icon;
+              const active = pathname === item.href || pathname.startsWith(item.href + '/');
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={clsx(styles.navItem, active && styles.navItemActive)}
+                  aria-current={active ? 'page' : undefined}
+                >
+                  <Icon size={18} />
+                  {item.label}
+                  {item.href === '/student/subscription' && tier && tier !== 'FREE' && (
+                    <span className={styles.tierPill} data-tier={tier}>{tier}</span>
+                  )}
+                </Link>
+              );
+            })}
+          </>
+        )}
       </nav>
 
       {/* Bottom section */}

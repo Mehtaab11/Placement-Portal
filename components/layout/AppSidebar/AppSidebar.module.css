@@ -172,3 +172,23 @@
   font-size: var(--text-xs);
   color: var(--color-dark-text-muted);
 }
+
+/* Subscription nav additions */
+.navDivider {
+  height: 1px;
+  background: var(--color-dark-border);
+  margin: var(--space-2) var(--space-3);
+}
+
+.tierPill {
+  margin-left: auto;
+  font-size: 0.625rem;
+  font-weight: var(--weight-bold);
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tierPill[data-tier='PRO'] { background: var(--color-primary-light); color: var(--color-primary); }
+.tierPill[data-tier='PREMIUM'] { background: #F5F3FF; color: #7C3AED; }

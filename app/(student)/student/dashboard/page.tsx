@@ -11,13 +11,22 @@ import {
   ArrowRight,
   Sparkles,
   Building2,
+  Crown,
+  BookOpen,
+  Video,
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
+import { getStudentEntitlements } from "@/lib/subscription/entitlements";
 import styles from "./studentDashboard.module.css";
 
 export default async function StudentDashboardPage() {
   const session = await auth();
   if (!session || session.user.role !== "STUDENT") redirect("/login");
+
+  const isSubscriptionsEnabled = process.env.NEXT_PUBLIC_SUBSCRIPTIONS_ENABLED === "true";
+  const entitlements = isSubscriptionsEnabled
+    ? await getStudentEntitlements(session.user.id)
+    : null;
 
   const profile = await prisma.studentProfile.findUnique({
     where: { userId: session.user.id },
@@ -83,6 +92,43 @@ export default async function StudentDashboardPage() {
           )}
         </div>
       </div>
+
+      {/* Subscription / Placement Perks Compact Card */}
+      {isSubscriptionsEnabled && entitlements && (
+        <div className={styles.subBannerCard}>
+          <div className={styles.subBannerLeft}>
+            <div className={styles.subTierPill} data-tier={entitlements.tier}>
+              <Crown size={14} /> {entitlements.tier} Plan
+            </div>
+            <div>
+              <h3 className={styles.subBannerTitle}>
+                {entitlements.tier === 'FREE'
+                  ? 'Boost your placement readiness with Pro & Premium features'
+                  : `Active Subscription • ${entitlements.daysLeft} days remaining`}
+              </h3>
+              <p className={styles.subBannerDesc}>
+                {entitlements.tier === 'FREE'
+                  ? 'Get unlimited mock assessments, video interview studio with AI feedback, and company tests.'
+                  : 'Practice company-specific mock tests and record video interview sessions.'}
+              </p>
+            </div>
+          </div>
+          <div className={styles.subBannerActions}>
+            <Link href="/student/mock-tests" className={styles.subQuickLink}>
+              <BookOpen size={14} /> Mock Tests
+            </Link>
+            <Link href="/student/video-interviews" className={styles.subQuickLink}>
+              <Video size={14} /> Video Studio
+            </Link>
+            <Link
+              href="/student/subscription"
+              className={entitlements.tier === 'FREE' ? styles.subUpgradeBtn : styles.subManageBtn}
+            >
+              {entitlements.tier === 'FREE' ? 'Upgrade to Pro' : 'Manage Plan'}
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* KPI Stats */}
       <div className={styles.statsGrid}>
