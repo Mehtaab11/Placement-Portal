@@ -1,8 +1,21 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback, useId } from 'react';
+import { useState, useEffect, useCallback, useId } from 'react';
 import { useRouter } from 'next/navigation';
-import { X, CreditCard, Smartphone, Building2, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import {
+  X,
+  CreditCard,
+  Smartphone,
+  Building2,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
+  ShieldCheck,
+  Sparkles,
+  Lock,
+  ArrowRight,
+  Check,
+} from 'lucide-react';
 import styles from './MockCheckout.module.css';
 
 type CheckoutState = 'idle' | 'processing' | 'success' | 'failure';
@@ -21,15 +34,15 @@ export default function MockCheckout() {
   const [open, setOpen] = useState(false);
   const [planId, setPlanId] = useState<string | null>(null);
   const [tab, setTab] = useState<PaymentTab>('upi');
+  const [selectedBank, setSelectedBank] = useState<string>('HDFC Bank');
   const [outcome, setOutcome] = useState<SimulatedOutcome>('SUCCESS');
   const [state, setState] = useState<CheckoutState>('idle');
   const [order, setOrder] = useState<OrderInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [receipt, setReceipt] = useState<string | null>(null);
-  const dialogRef = useRef<HTMLDialogElement>(null);
   const liveId = useId();
 
-  // Listen for upgrade button clicks anywhere on the page
+  // Listen for clicks on upgrade buttons
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       const target = e.target as HTMLElement;
@@ -42,50 +55,64 @@ export default function MockCheckout() {
         }
       }
     }
-    document.addEventListener('click', handleClick);
-    return () => document.removeEventListener('click', handleClick);
-  }, []);
 
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    if (open) {
-      dialog.showModal();
-      // Fetch order on open
-      if (planId && state === 'idle' && !order) {
-        void createOrder(planId);
+    function handleCustomEvent(e: Event) {
+      const customEvent = e as CustomEvent<{ planId: string }>;
+      if (customEvent.detail?.planId) {
+        setPlanId(customEvent.detail.planId);
+        setOpen(true);
       }
-    } else {
-      dialog.close();
-      // Reset on close
-      setState('idle');
-      setOrder(null);
-      setError(null);
-      setReceipt(null);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
 
-  // Disable Esc while processing
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        if (state !== 'processing') handleClose();
-      }
+    document.addEventListener('click', handleClick);
+    window.addEventListener('open-checkout', handleCustomEvent);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+      window.removeEventListener('open-checkout', handleCustomEvent);
     };
-    dialog.addEventListener('keydown', handler);
-    return () => dialog.removeEventListener('keydown', handler);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state]);
+  }, []);
 
   const handleClose = useCallback(() => {
     if (state === 'processing') return;
     setOpen(false);
     setPlanId(null);
+    setState('idle');
+    setOrder(null);
+    setError(null);
+    setReceipt(null);
   }, [state]);
+
+  // Handle escape key
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && state !== 'processing') {
+        handleClose();
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [open, state, handleClose]);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (open) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [open]);
+
+  // Create order when modal opens with a planId
+  useEffect(() => {
+    if (open && planId && !order && state === 'idle') {
+      void createOrder(planId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, planId]);
 
   async function createOrder(id: string) {
     setState('processing');
@@ -95,10 +122,21 @@ export default function MockCheckout() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ planId: id }),
       });
-      const data = await res.json() as { orderId?: string; amountPaise?: number; currency?: string; planSummary?: OrderInfo['planSummary']; error?: string };
-      if (!res.ok) throw new Error(data.error ?? 'Failed to create order');
+      const data = (await res.json()) as {
+        orderId?: string;
+        amountPaise?: number;
+        currency?: string;
+        planSummary?: OrderInfo['planSummary'];
+        error?: string;
+      };
+      if (!res.ok) throw new Error(data.error ?? 'Failed to initialize checkout');
       if (!data.orderId || !data.planSummary) throw new Error('Invalid order response');
-      setOrder({ orderId: data.orderId, amountPaise: data.amountPaise!, currency: data.currency!, planSummary: data.planSummary });
+      setOrder({
+        orderId: data.orderId,
+        amountPaise: data.amountPaise!,
+        currency: data.currency!,
+        planSummary: data.planSummary,
+      });
       setState('idle');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
@@ -117,18 +155,23 @@ export default function MockCheckout() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ orderId: order.orderId, simulatedOutcome: outcome }),
       });
-      const data = await res.json() as { status?: string; receiptNumber?: string; failureReason?: string; error?: string };
+      const data = (await res.json()) as {
+        status?: string;
+        receiptNumber?: string;
+        failureReason?: string;
+        error?: string;
+      };
 
       if (data.status === 'PAID') {
         setReceipt(data.receiptNumber ?? null);
         setState('success');
         router.refresh();
       } else {
-        setError(data.failureReason ?? data.error ?? 'Payment failed');
+        setError(data.failureReason ?? data.error ?? 'Payment was not completed');
         setState('failure');
       }
     } catch {
-      setError('Network error. Please try again.');
+      setError('Network error during gateway handshake. Please try again.');
       setState('failure');
     }
   }
@@ -137,204 +180,307 @@ export default function MockCheckout() {
     return `₹${(paise / 100).toLocaleString('en-IN')}`;
   }
 
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget && state !== 'processing') {
+      handleClose();
+    }
+  };
+
+  if (!open) return null;
+
   return (
-    <dialog
-      ref={dialogRef}
-      className={styles.dialog}
-      aria-labelledby="checkout-title"
-      aria-modal="true"
+    <div
+      className={styles.overlay}
+      onClick={handleBackdropClick}
+      role="presentation"
     >
-      <div className={styles.panel}>
-        {/* Header */}
-        <div className={styles.dialogHeader}>
-          <h2 id="checkout-title" className={styles.dialogTitle}>
-            {state === 'success' ? 'Payment Successful' : state === 'failure' && !order ? 'Error' : 'Complete Your Upgrade'}
-          </h2>
-          <button
-            className={styles.closeBtn}
-            onClick={handleClose}
-            aria-label="Close checkout"
-            disabled={state === 'processing'}
-          >
-            <X size={18} />
-          </button>
-        </div>
-
-        {/* DEMO MODE banner */}
-        <div className={styles.demoBanner} role="note">
-          DEMO MODE — No real money is charged. Payments are fully simulated.
-        </div>
-
-        {/* Live status region */}
-        <div id={liveId} aria-live="polite" className="sr-only">
-          {state === 'processing' ? 'Processing payment…' : ''}
-          {state === 'success' ? 'Payment successful!' : ''}
-          {state === 'failure' ? `Payment failed: ${error}` : ''}
-        </div>
-
-        {/* Processing overlay */}
-        {state === 'processing' && (
-          <div className={styles.processingOverlay}>
-            <Loader2 size={32} className={styles.spinner} />
-            <p>Processing payment…</p>
-          </div>
-        )}
-
-        {/* Success state */}
-        {state === 'success' && (
-          <div className={styles.successState}>
-            <div className={styles.successIcon}>
-              <CheckCircle2 size={48} />
-            </div>
-            <h3 className={styles.successTitle}>Payment Confirmed!</h3>
-            {receipt && (
-              <p className={styles.receiptNote}>
-                Receipt: <strong>{receipt}</strong>
-                {' — '}
-                <a href={`/student/subscription/receipt`} className={styles.receiptLink}>View receipt</a>
-              </p>
-            )}
-            <div className={styles.successActions}>
-              <button className={styles.primaryBtn} onClick={() => { handleClose(); router.push('/student/dashboard'); }}>
-                Go to Dashboard
-              </button>
-              <button className={styles.secondaryBtn} onClick={() => { handleClose(); router.push('/student/mock-tests'); }}>
-                Start a Mock Test
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Failure state */}
-        {state === 'failure' && (
-          <div className={styles.failureState}>
-            <div className={styles.failureIcon}><AlertCircle size={48} /></div>
-            <h3 className={styles.failureTitle}>Payment Failed</h3>
-            <p className={styles.failureReason}>{error}</p>
-            <div className={styles.successActions}>
-              <button className={styles.primaryBtn} onClick={() => {
-                setState('idle');
-                setError(null);
-                if (planId) void createOrder(planId);
-              }}>
-                Try Again
-              </button>
-              <button className={styles.secondaryBtn} onClick={handleClose}>Cancel</button>
-            </div>
-          </div>
-        )}
-
-        {/* Idle / processing normal checkout */}
-        {(state === 'idle' || state === 'processing') && order && (
-          <>
-            {/* Order summary */}
-            <div className={styles.orderSummary}>
-              <div className={styles.orderRow}>
-                <span>{order.planSummary.name} ({order.planSummary.durationDays}d)</span>
-                <span>{formatPaise(order.amountPaise)}</span>
+      <div
+        className={styles.modal}
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-labelledby="checkout-title"
+        aria-modal="true"
+      >
+        <div className={styles.panel}>
+          {/* Header */}
+          <div className={styles.dialogHeader}>
+            <div className={styles.headerLeft}>
+              <div className={styles.headerIconBadge}>
+                <Sparkles size={16} />
               </div>
-              <div className={styles.orderRow}>
-                <span className={styles.gstNote}>GST included (0% for demo)</span>
-                <span>₹0</span>
+              <div>
+                <h2 id="checkout-title" className={styles.dialogTitle}>
+                  {state === 'success'
+                    ? 'Payment Confirmed'
+                    : state === 'failure' && !order
+                    ? 'Checkout Error'
+                    : 'Upgrade Subscription'}
+                </h2>
               </div>
-              <div className={styles.orderTotal}>
-                <span>Total</span>
-                <strong>{formatPaise(order.amountPaise)}</strong>
-              </div>
+              <span className={styles.headerPill}>
+                <span className={styles.statusDot} />
+                Sandbox
+              </span>
             </div>
-
-            {/* Payment method tabs — visual only */}
-            <div className={styles.tabs} role="tablist">
-              {(['upi', 'card', 'netbanking'] as PaymentTab[]).map((t) => (
-                <button
-                  key={t}
-                  role="tab"
-                  aria-selected={tab === t}
-                  className={styles.tab}
-                  data-active={tab === t}
-                  onClick={() => setTab(t)}
-                >
-                  {t === 'upi' && <Smartphone size={14} />}
-                  {t === 'card' && <CreditCard size={14} />}
-                  {t === 'netbanking' && <Building2 size={14} />}
-                  {t === 'upi' ? 'UPI' : t === 'card' ? 'Card' : 'Net Banking'}
-                </button>
-              ))}
-            </div>
-
-            {/* Visual-only tab content — NO real data collected */}
-            <div className={styles.tabContent} role="tabpanel">
-              {tab === 'upi' && (
-                <div className={styles.demoField}>
-                  <label className={styles.demoFieldLabel}>UPI ID</label>
-                  <input
-                    type="text"
-                    readOnly
-                    value="demo@upi"
-                    className={styles.demoInput}
-                    aria-label="Demo UPI ID (read-only)"
-                  />
-                  <p className={styles.demoHint}>Demo UPI — no real transaction</p>
-                </div>
-              )}
-              {tab === 'card' && (
-                <div className={styles.demoField}>
-                  <label className={styles.demoFieldLabel}>Card Number</label>
-                  <input
-                    type="text"
-                    readOnly
-                    value="4111 1111 1111 1111 (demo)"
-                    className={styles.demoInput}
-                    aria-label="Demo card number (read-only)"
-                  />
-                  <p className={styles.demoHint}>No real card data is collected or stored.</p>
-                </div>
-              )}
-              {tab === 'netbanking' && (
-                <div className={styles.demoField}>
-                  <label className={styles.demoFieldLabel}>Bank</label>
-                  <input
-                    type="text"
-                    readOnly
-                    value="Demo National Bank"
-                    className={styles.demoInput}
-                    aria-label="Demo bank (read-only)"
-                  />
-                  <p className={styles.demoHint}>Simulated net banking — no real transfer.</p>
-                </div>
-              )}
-            </div>
-
-            {/* Simulation outcome selector */}
-            <fieldset className={styles.outcomeSelector}>
-              <legend className={styles.outcomeLegend}>Test Scenario</legend>
-              {(['SUCCESS', 'FAILURE', 'CANCELLED'] as SimulatedOutcome[]).map((o) => (
-                <label key={o} className={styles.outcomeOption}>
-                  <input
-                    type="radio"
-                    name="outcome"
-                    value={o}
-                    checked={outcome === o}
-                    onChange={() => setOutcome(o)}
-                  />
-                  <span>
-                    {o === 'SUCCESS' ? 'Simulate successful payment' : o === 'FAILURE' ? 'Simulate payment failure' : 'Cancel payment'}
-                  </span>
-                </label>
-              ))}
-            </fieldset>
 
             <button
-              className={styles.payBtn}
-              onClick={handlePay}
+              className={styles.closeBtn}
+              onClick={handleClose}
+              aria-label="Close checkout"
               disabled={state === 'processing'}
-              aria-describedby={liveId}
             >
-              Pay {formatPaise(order.amountPaise)}
+              <X size={15} />
             </button>
-          </>
-        )}
+          </div>
+
+          {/* Live screen reader announcement */}
+          <div id={liveId} aria-live="polite" className="sr-only">
+            {state === 'processing' ? 'Processing simulated transaction…' : ''}
+            {state === 'success' ? 'Payment approved and subscription activated!' : ''}
+            {state === 'failure' ? `Payment failed: ${error}` : ''}
+          </div>
+
+          {/* Processing State */}
+          {state === 'processing' && (
+            <div className={styles.processingOverlay}>
+              <div className={styles.spinnerRing}>
+                <Loader2 size={36} className={styles.spinner} />
+              </div>
+              <p className={styles.processingText}>Securing Transaction</p>
+              <p className={styles.processingSub}>Simulating bank authentication handshake…</p>
+            </div>
+          )}
+
+          {/* Success State */}
+          {state === 'success' && (
+            <div className={styles.successState}>
+              <div className={styles.successIconWrap}>
+                <CheckCircle2 size={36} />
+              </div>
+              <h3 className={styles.successTitle}>Subscription Active!</h3>
+              <p className={styles.successSubtitle}>
+                Your account has been upgraded. All premium mock tests and video interviews are unlocked.
+              </p>
+
+              {receipt && (
+                <div className={styles.receiptCard}>
+                  <div>
+                    <div className={styles.receiptLabel}>Transaction Receipt</div>
+                    <div className={styles.receiptCode}>{receipt}</div>
+                  </div>
+                  <a
+                    href={`/student/subscription/receipt`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={styles.receiptLink}
+                  >
+                    View Invoice
+                  </a>
+                </div>
+              )}
+
+              <div className={styles.successActions}>
+                <button
+                  className={styles.primaryBtn}
+                  onClick={() => {
+                    handleClose();
+                    router.push('/student/dashboard');
+                  }}
+                >
+                  Go to Dashboard
+                </button>
+                <button
+                  className={styles.secondaryBtn}
+                  onClick={() => {
+                    handleClose();
+                    router.push('/student/mock-tests');
+                  }}
+                >
+                  Start Mock Test
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Failure State */}
+          {state === 'failure' && (
+            <div className={styles.failureState}>
+              <div className={styles.failureIconWrap}>
+                <AlertCircle size={36} />
+              </div>
+              <h3 className={styles.failureTitle}>Transaction Declined</h3>
+              <div className={styles.failureReasonBox}>
+                {error ?? 'Simulated bank declined authorization.'}
+              </div>
+              <div className={styles.successActions}>
+                <button
+                  className={styles.primaryBtn}
+                  onClick={() => {
+                    setState('idle');
+                    setError(null);
+                    if (planId) void createOrder(planId);
+                  }}
+                >
+                  Try Again
+                </button>
+                <button className={styles.secondaryBtn} onClick={handleClose}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Normal Checkout Content */}
+          {state === 'idle' && order && (
+            <>
+              {/* Minimal Sleek Plan Card */}
+              <div className={styles.planCard}>
+                <div className={styles.planCardLeft}>
+                  <div className={styles.planNameRow}>
+                    <span className={styles.planName}>{order.planSummary.name}</span>
+                    <span className={styles.durationBadge}>
+                      {order.planSummary.durationDays} Days Access
+                    </span>
+                  </div>
+                  <p className={styles.planDescription}>{order.planSummary.description}</p>
+                </div>
+                <div className={styles.planPriceCol}>
+                  <div className={styles.planPrice}>{formatPaise(order.amountPaise)}</div>
+                  <span className={styles.taxNote}>Taxes included</span>
+                </div>
+              </div>
+
+              {/* Payment Method Switcher */}
+              <div className={styles.methodSection}>
+                <span className={styles.sectionLabel}>Select Simulated Method</span>
+                <div className={styles.segmentedTabs} role="tablist">
+                  {(['upi', 'card', 'netbanking'] as PaymentTab[]).map((t) => (
+                    <button
+                      key={t}
+                      role="tab"
+                      aria-selected={tab === t}
+                      className={styles.segmentedTab}
+                      data-active={tab === t}
+                      onClick={() => setTab(t)}
+                    >
+                      {t === 'upi' && <Smartphone size={13} />}
+                      {t === 'card' && <CreditCard size={13} />}
+                      {t === 'netbanking' && <Building2 size={13} />}
+                      {t === 'upi' ? 'UPI / VPA' : t === 'card' ? 'Card' : 'NetBanking'}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Method Specific Visual Preview */}
+                <div className={styles.methodDetailsCard}>
+                  {tab === 'upi' && (
+                    <div className={styles.upiBox}>
+                      <div className={styles.upiInfo}>
+                        <span className={styles.upiHandle}>student.placement@okhdfcbank</span>
+                        <span className={styles.upiSub}>Simulated Instant UPI Transfer</span>
+                      </div>
+                      <span className={styles.upiBadge}>
+                        <Check size={11} /> Verified
+                      </span>
+                    </div>
+                  )}
+
+                  {tab === 'card' && (
+                    <div className={styles.cardMockup}>
+                      <div className={styles.cardTopRow}>
+                        <div className={styles.chipIcon} />
+                        <span className={styles.cardBrand}>TEST PLATINUM</span>
+                      </div>
+                      <div className={styles.cardNumberMask}>•••• •••• •••• 4242</div>
+                      <div className={styles.cardBottomRow}>
+                        <span className={styles.cardHolder}>PLACEMENT STUDENT</span>
+                        <span>EXP 12/28</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {tab === 'netbanking' && (
+                    <div className={styles.bankList}>
+                      {['HDFC Bank', 'ICICI Bank', 'State Bank of India'].map((b) => (
+                        <button
+                          key={b}
+                          type="button"
+                          className={styles.bankPill}
+                          data-selected={selectedBank === b}
+                          onClick={() => setSelectedBank(b)}
+                        >
+                          {b}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Sleek Test Scenario Switcher */}
+              <div className={styles.scenarioSection}>
+                <span className={styles.sectionLabel}>Sandbox Test Scenario</span>
+                <div className={styles.scenarioGrid}>
+                  <div
+                    className={styles.scenarioCard}
+                    data-active={outcome === 'SUCCESS'}
+                    data-type="SUCCESS"
+                    onClick={() => setOutcome('SUCCESS')}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <div className={styles.scenarioIcon}>✓</div>
+                    <span className={styles.scenarioTitle}>Success</span>
+                    <span className={styles.scenarioDesc}>Approve & unlock</span>
+                  </div>
+
+                  <div
+                    className={styles.scenarioCard}
+                    data-active={outcome === 'FAILURE'}
+                    data-type="FAILURE"
+                    onClick={() => setOutcome('FAILURE')}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <div className={styles.scenarioIcon}>✕</div>
+                    <span className={styles.scenarioTitle}>Decline</span>
+                    <span className={styles.scenarioDesc}>Bank decline error</span>
+                  </div>
+
+                  <div
+                    className={styles.scenarioCard}
+                    data-active={outcome === 'CANCELLED'}
+                    data-type="CANCELLED"
+                    onClick={() => setOutcome('CANCELLED')}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <div className={styles.scenarioIcon}>⊘</div>
+                    <span className={styles.scenarioTitle}>Cancel</span>
+                    <span className={styles.scenarioDesc}>User abort test</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Primary Action Button */}
+              <button
+                className={styles.payBtn}
+                onClick={handlePay}
+                aria-describedby={liveId}
+              >
+                <Lock size={15} />
+                Confirm & Pay {formatPaise(order.amountPaise)}
+                <ArrowRight size={15} />
+              </button>
+
+              <div className={styles.securityNote}>
+                <ShieldCheck size={13} />
+                <span>Simulated Sandbox Environment • No real money charged</span>
+              </div>
+            </>
+          )}
+        </div>
       </div>
-    </dialog>
+    </div>
   );
 }

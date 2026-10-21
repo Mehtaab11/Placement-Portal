@@ -50,6 +50,7 @@ To address all these risks, the implementation adheres to five non-negotiable ar
 ## 3. Data Model (`prisma/schema.prisma`)
 
 All changes are additive. Existing models maintain 100% backward compatibility:
+
 - **`PlanTier`**: `PRO`, `PREMIUM`
 - **`SubscriptionStatus`**: `PENDING`, `ACTIVE`, `EXPIRED`, `CANCELED`
 - **`PaymentStatus`**: `CREATED`, `PAID`, `FAILED`, `REFUNDED`
@@ -81,11 +82,11 @@ All changes are additive. Existing models maintain 100% backward compatibility:
    - Resolves plan price securely from DB in paise (never trusting client input).
    - Generates simulated provider order ID `mock_order_<uuid>`.
    - Creates `Payment` with status `CREATED`.
-2. **Client Checkout Modal (`MockCheckout.tsx`)**:
-   - Realistic modal showing order summary, GST calculation, and visual-only UPI/Card/Netbanking tabs.
-   - **Zero sensitive data collection**: Does not prompt for or accept real credit card or bank credentials.
-   - Provides test scenarios: *Simulate Successful Payment*, *Simulate Payment Failure*, *Simulate Cancellation*.
-   - Shows prominent "DEMO MODE — NO REAL MONEY CHARGED" badges.
+2. **Client Checkout Modal (`MockCheckout.tsx` & `MockCheckout.module.css`)**:
+   - Minimalist, sleek dark glassmorphism modal with fixed backdrop overlay and spring entrance animation.
+   - Plan card with duration pill, clean price typography, and instant simulated method switcher (UPI / VPA, Card, NetBanking).
+   - Interactive 3-card sandbox scenario selector (Success, Bank Decline, User Cancelled) replacing bulky radio fieldsets.
+   - **Zero sensitive data collection**: Purely simulated sandbox interface with subtle security disclosures.
 3. **Confirm Payment (`POST /api/student/subscription/confirm`)**:
    - Verifies ownership and idempotency (repeating confirm returns stored result).
    - In a single Prisma transaction: marks Payment `PAID`, activates/extends Subscription duration, generates unique receipt number, and posts an in-app notification.

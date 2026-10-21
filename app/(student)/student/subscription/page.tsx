@@ -294,9 +294,10 @@ function PlanCard({
         ) : planId ? (
           // Uses a data attribute — the MockCheckout modal listens for this
           <button
+            type="button"
             className={styles.upgradeBtn}
             data-plan-id={planId}
-            id={`upgrade-${tier.toLowerCase()}`}
+            id={`upgrade-${planId}`}
           >
             Upgrade to {tier}
           </button>
