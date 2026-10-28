@@ -35,11 +35,16 @@ export default function MockCheckout() {
   const [planId, setPlanId] = useState<string | null>(null);
   const [tab, setTab] = useState<PaymentTab>('upi');
   const [selectedBank, setSelectedBank] = useState<string>('HDFC Bank');
+  const [cardNumber, setCardNumber] = useState('4242 4242 4242 4242');
+  const [cardExpiry, setCardExpiry] = useState('12/28');
+  const [cardCvv, setCardCvv] = useState('123');
+  const [cardHolder, setCardHolder] = useState('PLACEMENT STUDENT');
   const [outcome, setOutcome] = useState<SimulatedOutcome>('SUCCESS');
   const [state, setState] = useState<CheckoutState>('idle');
   const [order, setOrder] = useState<OrderInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [receipt, setReceipt] = useState<string | null>(null);
+  const [receiptPaymentId, setReceiptPaymentId] = useState<string | null>(null);
   const liveId = useId();
 
   // Listen for clicks on upgrade buttons
@@ -81,6 +86,7 @@ export default function MockCheckout() {
     setOrder(null);
     setError(null);
     setReceipt(null);
+    setReceiptPaymentId(null);
   }, [state]);
 
   // Handle escape key
@@ -157,6 +163,7 @@ export default function MockCheckout() {
       });
       const data = (await res.json()) as {
         status?: string;
+        paymentId?: string;
         receiptNumber?: string;
         failureReason?: string;
         error?: string;
@@ -164,6 +171,7 @@ export default function MockCheckout() {
 
       if (data.status === 'PAID') {
         setReceipt(data.receiptNumber ?? null);
+        setReceiptPaymentId(data.paymentId ?? null);
         setState('success');
         router.refresh();
       } else {
@@ -269,7 +277,7 @@ export default function MockCheckout() {
                     <div className={styles.receiptCode}>{receipt}</div>
                   </div>
                   <a
-                    href={`/student/subscription/receipt`}
+                    href={`/student/subscription/receipt${receiptPaymentId ? `?paymentId=${receiptPaymentId}` : ''}`}
                     target="_blank"
                     rel="noreferrer"
                     className={styles.receiptLink}
@@ -386,32 +394,152 @@ export default function MockCheckout() {
                   )}
 
                   {tab === 'card' && (
-                    <div className={styles.cardMockup}>
-                      <div className={styles.cardTopRow}>
-                        <div className={styles.chipIcon} />
-                        <span className={styles.cardBrand}>TEST PLATINUM</span>
+                    <div className={styles.cardSection}>
+                      <div className={styles.cardMockup}>
+                        <div className={styles.cardTopRow}>
+                          <div className={styles.chipIcon} />
+                          <span className={styles.cardBrand}>TEST PLATINUM</span>
+                        </div>
+                        <div className={styles.cardNumberMask}>
+                          {cardNumber || '•••• •••• •••• 4242'}
+                        </div>
+                        <div className={styles.cardBottomRow}>
+                          <span className={styles.cardHolder}>
+                            {cardHolder.toUpperCase() || 'PLACEMENT STUDENT'}
+                          </span>
+                          <span>EXP {cardExpiry || '12/28'}</span>
+                        </div>
                       </div>
-                      <div className={styles.cardNumberMask}>•••• •••• •••• 4242</div>
-                      <div className={styles.cardBottomRow}>
-                        <span className={styles.cardHolder}>PLACEMENT STUDENT</span>
-                        <span>EXP 12/28</span>
+
+                      <div className={styles.cardForm}>
+                        <div className={styles.formGroup}>
+                          <label className={styles.formLabel}>Card Number:</label>
+                          <input
+                            type="text"
+                            maxLength={19}
+                            className={styles.formInput}
+                            placeholder="4242 4242 4242 4242"
+                            value={cardNumber}
+                            onChange={(e) => {
+                              const v = e.target.value.replace(/\D/g, '').slice(0, 16);
+                              const formatted = v.match(/.{1,4}/g)?.join(' ') || v;
+                              setCardNumber(formatted);
+                            }}
+                          />
+                        </div>
+
+                        <div className={styles.formRow}>
+                          <div className={styles.formGroup}>
+                            <label className={styles.formLabel}>Expiration Date:</label>
+                            <input
+                              type="text"
+                              maxLength={5}
+                              className={styles.formInput}
+                              placeholder="MM/YY"
+                              value={cardExpiry}
+                              onChange={(e) => {
+                                let v = e.target.value.replace(/\D/g, '').slice(0, 4);
+                                if (v.length >= 3) {
+                                  v = `${v.slice(0, 2)}/${v.slice(2)}`;
+                                }
+                                setCardExpiry(v);
+                              }}
+                            />
+                          </div>
+
+                          <div className={styles.formGroup}>
+                            <label className={styles.formLabel}>CVV / Security Code:</label>
+                            <input
+                              type="password"
+                              maxLength={4}
+                              className={styles.formInput}
+                              placeholder="•••"
+                              value={cardCvv}
+                              onChange={(e) => setCardCvv(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                            />
+                          </div>
+                        </div>
+
+                        <div className={styles.formGroup}>
+                          <label className={styles.formLabel}>Cardholder Name:</label>
+                          <input
+                            type="text"
+                            className={styles.formInput}
+                            placeholder="Cardholder Name as on card"
+                            value={cardHolder}
+                            onChange={(e) => setCardHolder(e.target.value)}
+                          />
+                        </div>
                       </div>
                     </div>
                   )}
 
                   {tab === 'netbanking' && (
-                    <div className={styles.bankList}>
-                      {['HDFC Bank', 'ICICI Bank', 'State Bank of India'].map((b) => (
-                        <button
-                          key={b}
-                          type="button"
-                          className={styles.bankPill}
-                          data-selected={selectedBank === b}
-                          onClick={() => setSelectedBank(b)}
+                    <div className={styles.netbankingWrap}>
+                      <span className={styles.subLabel}>Popular Banks</span>
+                      <div className={styles.bankList}>
+                        {[
+                          'HDFC Bank',
+                          'ICICI Bank',
+                          'State Bank of India',
+                          'Axis Bank',
+                          'Kotak Mahindra Bank',
+                          'Punjab National Bank',
+                        ].map((b) => (
+                          <button
+                            key={b}
+                            type="button"
+                            className={styles.bankPill}
+                            data-selected={selectedBank === b}
+                            onClick={() => setSelectedBank(b)}
+                          >
+                            {b}
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className={styles.otherBankRow}>
+                        <label htmlFor="other-banks-select" className={styles.subLabel}>
+                          Or Select Other Bank:
+                        </label>
+                        <select
+                          id="other-banks-select"
+                          className={styles.bankSelect}
+                          value={[
+                            'HDFC Bank',
+                            'ICICI Bank',
+                            'State Bank of India',
+                            'Axis Bank',
+                            'Kotak Mahindra Bank',
+                            'Punjab National Bank',
+                          ].includes(selectedBank) ? '' : selectedBank}
+                          onChange={(e) => {
+                            if (e.target.value) setSelectedBank(e.target.value);
+                          }}
                         >
-                          {b}
-                        </button>
-                      ))}
+                          <option value="">-- Choose from 15+ other banks --</option>
+                          <option value="Bank of Baroda">Bank of Baroda</option>
+                          <option value="Canara Bank">Canara Bank</option>
+                          <option value="Union Bank of India">Union Bank of India</option>
+                          <option value="IndusInd Bank">IndusInd Bank</option>
+                          <option value="Federal Bank">Federal Bank</option>
+                          <option value="Yes Bank">Yes Bank</option>
+                          <option value="IDBI Bank">IDBI Bank</option>
+                          <option value="Bank of India">Bank of India</option>
+                          <option value="Indian Bank">Indian Bank</option>
+                          <option value="Central Bank of India">Central Bank of India</option>
+                          <option value="Indian Overseas Bank">Indian Overseas Bank</option>
+                          <option value="UCO Bank">UCO Bank</option>
+                          <option value="RBL Bank">RBL Bank</option>
+                          <option value="Karnataka Bank">Karnataka Bank</option>
+                        </select>
+                      </div>
+
+                      {selectedBank && (
+                        <div className={styles.selectedBankNotice}>
+                          Selected: <strong>{selectedBank}</strong> (Simulated Internet Banking Gateway)
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

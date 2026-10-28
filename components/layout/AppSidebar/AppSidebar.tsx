@@ -4,14 +4,11 @@ import styles from './AppSidebar.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { signOut } from 'next-auth/react';
 import { clsx } from 'clsx';
 import {
   LayoutDashboard,
   Briefcase,
   BarChart3,
-  Settings,
-  LogOut,
   Building2,
   GraduationCap,
   Plus,
@@ -19,7 +16,8 @@ import {
   Bell,
   BookOpen,
   Video,
-  CreditCard,
+  IndianRupee,
+  Crown,
 } from 'lucide-react';
 import type { Role } from '@prisma/client';
 
@@ -57,7 +55,7 @@ const NAV_BY_ROLE: Record<Role, NavItem[]> = {
 const STUDENT_SUB_ITEMS: NavItem[] = [
   { href: '/student/mock-tests', label: 'Mock Tests', icon: BookOpen },
   { href: '/student/video-interviews', label: 'Video Interviews', icon: Video },
-  { href: '/student/subscription', label: 'Subscription', icon: CreditCard },
+  { href: '/student/subscription', label: 'Subscription', icon: IndianRupee },
 ];
 
 
@@ -75,7 +73,7 @@ interface AppSidebarProps {
   tier?: string;
 }
 
-export function AppSidebar({ role, userName, tier }: AppSidebarProps) {
+export function AppSidebar({ role, tier }: AppSidebarProps) {
   const pathname = usePathname();
   const navItems = NAV_BY_ROLE[role];
   const subNavItems = role === 'STUDENT' && subscriptionsEnabled
@@ -123,8 +121,8 @@ export function AppSidebar({ role, userName, tier }: AppSidebarProps) {
               className={clsx(styles.navItem, active && styles.navItemActive)}
               aria-current={active ? 'page' : undefined}
             >
-              <Icon size={18} />
-              {item.label}
+              <Icon size={18} className={styles.navIcon} />
+              <span>{item.label}</span>
             </Link>
           );
         })}
@@ -141,10 +139,16 @@ export function AppSidebar({ role, userName, tier }: AppSidebarProps) {
                   className={clsx(styles.navItem, active && styles.navItemActive)}
                   aria-current={active ? 'page' : undefined}
                 >
-                  <Icon size={18} />
-                  {item.label}
+                  <Icon size={18} className={styles.navIcon} />
+                  <span>{item.label}</span>
                   {item.href === '/student/subscription' && tier && tier !== 'FREE' && (
-                    <span className={styles.tierPill} data-tier={tier}>{tier}</span>
+                    <span
+                      className={styles.crownPill}
+                      data-tier={tier}
+                      title={`${tier} Active`}
+                    >
+                      <Crown size={13} className={styles.crownSvg} />
+                    </span>
                   )}
                 </Link>
               );
@@ -152,36 +156,6 @@ export function AppSidebar({ role, userName, tier }: AppSidebarProps) {
           </>
         )}
       </nav>
-
-      {/* Bottom section */}
-      <div className={styles.bottom}>
-        <Link
-          href={`/${role.toLowerCase()}/settings`}
-          className={clsx(styles.navItem, pathname.includes('/settings') && styles.navItemActive)}
-        >
-          <Settings size={18} />
-          Settings
-        </Link>
-        <button
-          className={clsx(styles.navItem, styles.logoutBtn)}
-          onClick={() => signOut({ callbackUrl: '/login' })}
-          id="sidebar-logout"
-        >
-          <LogOut size={18} />
-          Sign out
-        </button>
-        {userName && (
-          <div className={styles.userInfo}>
-            <div className={styles.userAvatar}>
-              {userName.charAt(0).toUpperCase()}
-            </div>
-            <div className={styles.userText}>
-              <p className={styles.userName}>{userName}</p>
-              <p className={styles.userRole}>{role.charAt(0) + role.slice(1).toLowerCase()}</p>
-            </div>
-          </div>
-        )}
-      </div>
     </aside>
   );
 }

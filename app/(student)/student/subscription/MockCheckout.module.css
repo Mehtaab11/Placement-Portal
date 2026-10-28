@@ -327,11 +327,22 @@
   border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
-/* Sleek Card Preview */
+/* Sleek Card Preview & Interactive Form */
+.cardSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .cardMockup {
   display: flex;
   flex-direction: column;
   gap: 0.625rem;
+  padding: 0.875rem 1rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(30, 27, 75, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
 .cardTopRow {
@@ -358,10 +369,10 @@
 
 .cardNumberMask {
   font-family: var(--font-mono, monospace);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: #ffffff;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
 }
 
 .cardBottomRow {
@@ -375,10 +386,70 @@
   text-transform: uppercase;
   letter-spacing: 0.04em;
   font-weight: 600;
-  color: #a1a1aa;
+  color: #c4b5fd;
 }
 
-/* Netbanking Pills */
+/* Card Form Fields */
+.cardForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.formRow {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.formLabel {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.02em;
+}
+
+.formInput {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  color: #ffffff;
+  outline: none;
+  font-family: inherit;
+  transition: all 150ms ease;
+}
+
+.formInput:focus {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.08);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.formInput::placeholder {
+  color: #64748b;
+}
+
+/* Netbanking Pills & Selector */
+.netbankingWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.subLabel {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
 .bankList {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -402,10 +473,56 @@
   transition: all 150ms ease;
 }
 
+.bankPill:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
 .bankPill[data-selected='true'] {
   background: rgba(99, 102, 241, 0.15);
   border-color: rgba(99, 102, 241, 0.4);
   color: #ffffff;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+}
+
+.otherBankRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-top: 0.25rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.bankSelect {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  color: #ffffff;
+  outline: none;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.bankSelect:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.bankSelect option {
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.selectedBankNotice {
+  font-size: 0.6875rem;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  padding: 0.375rem 0.625rem;
+  border-radius: 6px;
 }
 
 /* ─── Simulation Outcome Selector (Sleek 3-Card Grid) ─────────────────────── */

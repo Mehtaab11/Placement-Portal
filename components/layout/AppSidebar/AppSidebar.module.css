@@ -180,15 +180,44 @@
   margin: var(--space-2) var(--space-3);
 }
 
-.tierPill {
-  margin-left: auto;
-  font-size: 0.625rem;
-  font-weight: var(--weight-bold);
-  padding: 0.1rem 0.4rem;
-  border-radius: var(--radius-full);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+.navIcon {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  flex-shrink: 0;
+  display: inline-block;
 }
 
-.tierPill[data-tier='PRO'] { background: var(--color-primary-light); color: var(--color-primary); }
-.tierPill[data-tier='PREMIUM'] { background: #F5F3FF; color: #7C3AED; }
+.crownPill {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 5px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  box-shadow: none;
+  transition: opacity var(--transition-fast);
+}
+
+.crownPill:hover {
+  opacity: 0.85;
+}
+
+.crownPill[data-tier='PREMIUM'] {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  box-shadow: none;
+}
+
+.crownPill[data-tier='PRO'] {
+  background: rgba(99, 102, 241, 0.12);
+  color: #818cf8;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  box-shadow: none;
+}
+
+.crownSvg {
+  display: block;
+}

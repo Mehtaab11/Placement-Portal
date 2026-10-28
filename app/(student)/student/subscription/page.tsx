@@ -166,9 +166,10 @@ export default async function SubscriptionPage() {
             premiumPackages: false,
             reviewedVideoFeedback: false,
           }}
-          isCurrentPlan={entitlements.tier === 'FREE'}
+          isCurrentPlan={entitlements.tier === 'FREE' || !entitlements.isActive}
           isPopular={false}
           planId={null}
+          userTier={entitlements.tier}
         />
 
         {plans.map((plan) => (
@@ -183,6 +184,7 @@ export default async function SubscriptionPage() {
             isCurrentPlan={entitlements.tier === plan.tier && entitlements.isActive}
             isPopular={plan.tier === 'PRO'}
             planId={plan.id}
+            userTier={entitlements.tier}
           />
         ))}
       </div>
@@ -241,6 +243,7 @@ function PlanCard({
   isCurrentPlan,
   isPopular,
   planId,
+  userTier,
 }: {
   name: string;
   tier: string;
@@ -251,6 +254,7 @@ function PlanCard({
   isCurrentPlan: boolean;
   isPopular: boolean;
   planId: string | null;
+  userTier: string;
 }) {
   const featureRows = [
     { label: 'Mock Tests / month', value: typeof features.mockTestsPerMonth === 'number' ? `${features.mockTestsPerMonth}` : '—' },
@@ -258,6 +262,10 @@ function PlanCard({
     { label: 'Premium Test Packages', value: features.premiumPackages },
     { label: 'Reviewed Video Feedback', value: features.reviewedVideoFeedback },
   ];
+
+  // Determine if this plan is lower than current active user tier
+  const tierWeight: Record<string, number> = { FREE: 0, PRO: 1, PREMIUM: 2 };
+  const isLowerTier = (tierWeight[userTier] ?? 0) > (tierWeight[tier] ?? 0);
 
   return (
     <div className={styles.planCard} data-popular={isPopular} data-current={isCurrentPlan}>
@@ -292,17 +300,20 @@ function PlanCard({
         {isCurrentPlan ? (
           <div className={styles.currentPlanBtn}>Current Plan</div>
         ) : planId ? (
-          // Uses a data attribute — the MockCheckout modal listens for this
-          <button
-            type="button"
-            className={styles.upgradeBtn}
-            data-plan-id={planId}
-            id={`upgrade-${planId}`}
-          >
-            Upgrade to {tier}
-          </button>
+          isLowerTier ? (
+            <div className={styles.freePlanBtn}>Included in {userTier}</div>
+          ) : (
+            <button
+              type="button"
+              className={styles.upgradeBtn}
+              data-plan-id={planId}
+              id={`upgrade-${planId}`}
+            >
+              Upgrade to {tier}
+            </button>
+          )
         ) : (
-          <div className={styles.freePlanBtn}>Your Current Plan</div>
+          <div className={styles.freePlanBtn}>Standard / Basic Tier</div>
         )}
       </div>
     </div>

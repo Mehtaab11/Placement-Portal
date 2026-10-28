@@ -69,6 +69,7 @@ export async function POST(request: Request) {
   if (payment.status === 'PAID') {
     return NextResponse.json({
       status: 'PAID',
+      paymentId: payment.id,
       receiptNumber: payment.receiptNumber,
       message: 'Payment already confirmed.',
     });
@@ -162,6 +163,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       status: 'PAID',
+      paymentId: payment.id,
       receiptNumber,
       tier: payment.plan.tier,
       validUntil: periodEnd.toISOString(),

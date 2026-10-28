@@ -1,9 +1,25 @@
 'use client';
 
 import styles from './AppHeader.module.css';
-import { Search, Bell, HelpCircle, X, BookOpen, Keyboard, Phone, Mail, MapPin, CheckCircle2 } from 'lucide-react';
+import {
+  Search,
+  Bell,
+  HelpCircle,
+  X,
+  BookOpen,
+  Keyboard,
+  Phone,
+  Mail,
+  MapPin,
+  CheckCircle2,
+  User,
+  Settings,
+  LogOut,
+  ChevronDown,
+} from 'lucide-react';
 import { useState, useEffect, useRef, type ReactNode } from 'react';
 import Link from 'next/link';
+import { signOut } from 'next-auth/react';
 import { Avatar } from '@/components/ui/Avatar/Avatar';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
@@ -30,7 +46,9 @@ export function AppHeader({
 }: AppHeaderProps) {
   const [searchValue, setSearchValue] = useState('');
   const [showHelpModal, setShowHelpModal] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -39,14 +57,28 @@ export function AppHeader({
         searchInputRef.current?.focus();
         searchInputRef.current?.select();
       }
-      if (e.key === 'Escape' && showHelpModal) {
-        setShowHelpModal(false);
+      if (e.key === 'Escape') {
+        if (showHelpModal) setShowHelpModal(false);
+        if (showUserMenu) setShowUserMenu(false);
+      }
+    };
+
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setShowUserMenu(false);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [showHelpModal]);
+    if (showUserMenu) {
+      document.addEventListener('mousedown', handleOutsideClick);
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [showHelpModal, showUserMenu]);
 
   return (
     <>
@@ -98,16 +130,73 @@ export function AppHeader({
             <HelpCircle size={18} />
           </button>
 
-          {/* User avatar */}
+          {/* User profile dropdown menu */}
           {user && (
-            <Link
-              href={`/${user.role?.toLowerCase()}/settings`}
-              className={styles.userBtn}
-              aria-label="Account settings"
-              id="header-user"
-            >
-              <Avatar name={user.name ?? user.email} size="sm" />
-            </Link>
+            <div className={styles.userMenuWrapper} ref={userMenuRef}>
+              <button
+                type="button"
+                className={styles.userMenuTrigger}
+                onClick={() => setShowUserMenu((prev) => !prev)}
+                data-open={showUserMenu}
+                aria-expanded={showUserMenu}
+                aria-haspopup="true"
+                id="header-user-menu-btn"
+              >
+                <Avatar name={user.name ?? user.email} size="sm" />
+                <span className={styles.userNameLabel}>
+                  {user.name || user.email?.split('@')[0]}
+                </span>
+                <ChevronDown size={14} className={styles.chevronIcon} />
+              </button>
+
+              {showUserMenu && (
+                <div className={styles.userDropdown} role="menu">
+                  <div className={styles.dropdownHeader}>
+                    <Avatar name={user.name ?? user.email} size="sm" />
+                    <div className={styles.dropdownUserText}>
+                      <span className={styles.dropdownUserName}>{user.name || 'User'}</span>
+                      <span className={styles.dropdownUserEmail}>{user.email}</span>
+                      <span className={styles.dropdownRoleBadge}>{user.role || 'STUDENT'}</span>
+                    </div>
+                  </div>
+
+                  <Link
+                    href={`/${user.role?.toLowerCase()}/profile`}
+                    className={styles.dropdownItem}
+                    role="menuitem"
+                    onClick={() => setShowUserMenu(false)}
+                  >
+                    <User size={15} />
+                    <span>Profile</span>
+                  </Link>
+
+                  <Link
+                    href={`/${user.role?.toLowerCase()}/settings`}
+                    className={styles.dropdownItem}
+                    role="menuitem"
+                    onClick={() => setShowUserMenu(false)}
+                  >
+                    <Settings size={15} />
+                    <span>Settings</span>
+                  </Link>
+
+                  <div className={styles.dropdownDivider} />
+
+                  <button
+                    type="button"
+                    className={`${styles.dropdownItem} ${styles.logoutDropdownItem}`}
+                    role="menuitem"
+                    onClick={() => {
+                      setShowUserMenu(false);
+                      signOut({ callbackUrl: '/login' });
+                    }}
+                  >
+                    <LogOut size={15} />
+                    <span>Sign out</span>
+                  </button>
+                </div>
+              )}
+            </div>
           )}
         </div>
       </header>

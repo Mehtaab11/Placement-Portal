@@ -143,11 +143,8 @@ export default async function PackageDetailPage({
 
 function StartTestButton({ testId }: { testId: string }) {
   return (
-    <form action={`/api/student/mock-tests/start`} method="POST">
-      <input type="hidden" name="testId" value={testId} />
-      <Link href={`/student/mock-tests/start?testId=${testId}`} className={styles.startBtn}>
-        <Play size={14} /> Start Test
-      </Link>
-    </form>
+    <Link href={`/student/mock-tests/start?testId=${testId}`} className={styles.startBtn}>
+      <Play size={14} /> Start Test
+    </Link>
   );
 }

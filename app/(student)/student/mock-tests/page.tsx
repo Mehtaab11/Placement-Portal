@@ -3,7 +3,7 @@ import { redirect, notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getStudentEntitlements } from '@/lib/subscription/entitlements';
 import Link from 'next/link';
-import { Lock, BookOpen, Star, Filter } from 'lucide-react';
+import { Lock, BookOpen, Star, Filter, Sparkles, Play } from 'lucide-react';
 import styles from './mockTests.module.css';
 
 export const metadata = { title: 'Mock Tests — TPO Portal' };
@@ -62,6 +62,23 @@ export default async function MockTestsPage({
         <p className={styles.subtitle}>
           Practice aptitude, technical, and company-specific tests to sharpen your skills.
         </p>
+      </div>
+
+      {/* Featured Interactive Dummy Test */}
+      <div className={styles.demoBanner}>
+        <div className={styles.demoBannerLeft}>
+          <div className={styles.demoTag}>
+            <Sparkles size={13} />
+            Interactive Dummy Test • Live Practice
+          </div>
+          <h2 className={styles.demoTitle}>Placement Aptitude & CS Core Sprint</h2>
+          <p className={styles.demoDesc}>
+            Interactive 15-minute practice assessment with real-time countdown timer, question palette, autosave, and instant score report. Perfect for demonstrations and quick practice!
+          </p>
+        </div>
+        <Link href="/student/mock-tests/start?testId=demo_test_interactive_01" className={styles.demoStartBtn}>
+          <Play size={16} /> Start Interactive Test
+        </Link>
       </div>
 
       {/* Filters */}
