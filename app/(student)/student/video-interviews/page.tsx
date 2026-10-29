@@ -3,9 +3,10 @@ import { redirect, notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getStudentEntitlements } from '@/lib/subscription/entitlements';
 import Link from 'next/link';
-import { Video, Lock, Clock } from 'lucide-react';
+import { Video, Lock, Clock, ArrowRight } from 'lucide-react';
 import styles from './videoInterviews.module.css';
 import { formatDate } from '@/lib/utils';
+import { StartPracticeButton } from './StartPracticeButton';
 
 export const metadata = { title: 'Video Interviews — TPO Portal' };
 
@@ -110,9 +111,7 @@ export default async function VideoInterviewsPage() {
                   {!hasVideoAccess ? 'Requires PRO or higher' : `Requires ${tmpl.requiredTier}`}
                 </div>
               ) : (
-                <Link href={`/student/video-interviews/${tmpl.id}`} className={styles.startBtn}>
-                  Start Practice
-                </Link>
+                <StartPracticeButton templateId={tmpl.id} />
               )}
             </div>
           );
@@ -132,7 +131,12 @@ export default async function VideoInterviewsPage() {
           <h2 className={styles.sectionTitle}>Past Sessions</h2>
           <div className={styles.sessionList}>
             {sessions.map((s) => (
-              <div key={s.id} className={styles.sessionCard}>
+              <Link
+                key={s.id}
+                href={`/student/video-interviews/${s.id}`}
+                className={styles.sessionCard}
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
                 <div>
                   <p className={styles.sessionTemplate}>{s.template.title}</p>
                   <p className={styles.sessionDate}>{formatDate(s.startedAt)}</p>
@@ -144,8 +148,9 @@ export default async function VideoInterviewsPage() {
                   {s.reviewerFeedback && (
                     <span className={styles.feedbackDot} title="Feedback available" />
                   )}
+                  <ArrowRight size={14} color="var(--color-text-tertiary)" />
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

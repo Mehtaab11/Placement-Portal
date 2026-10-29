@@ -58,6 +58,10 @@ const STUDENT_SUB_ITEMS: NavItem[] = [
   { href: '/student/subscription', label: 'Subscription', icon: IndianRupee },
 ];
 
+const ADMIN_SUB_ITEMS: NavItem[] = [
+  { href: '/admin/video-interviews', label: 'Video Interviews', icon: Video },
+  { href: '/admin/subscriptions', label: 'Subscriptions', icon: IndianRupee },
+];
 
 const CTA_BY_ROLE: Record<Role, { href: string; label: string } | null> = {
   STUDENT: null,
@@ -76,8 +80,12 @@ interface AppSidebarProps {
 export function AppSidebar({ role, tier }: AppSidebarProps) {
   const pathname = usePathname();
   const navItems = NAV_BY_ROLE[role];
-  const subNavItems = role === 'STUDENT' && subscriptionsEnabled
-    ? STUDENT_SUB_ITEMS
+  const subNavItems = subscriptionsEnabled
+    ? role === 'STUDENT'
+      ? STUDENT_SUB_ITEMS
+      : role === 'ADMIN'
+      ? ADMIN_SUB_ITEMS
+      : []
     : [];
   const cta = CTA_BY_ROLE[role];
 
