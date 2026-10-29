@@ -1,35 +1,53 @@
 'use client';
 
-import { useState } from 'react';
-import { Search, Download, Eye, CheckCircle2, XCircle, Award } from 'lucide-react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Search, Download, Eye, CheckCircle2, XCircle, Award, X, Loader2 } from 'lucide-react';
 import styles from './students.module.css';
 import { Drawer } from '@/components/ui/Drawer/Drawer';
 import { Button } from '@/components/ui/Button/Button';
+import { matchesBranch } from '@/lib/branchMatcher';
 
-export default function StudentDirectoryClient({ initialStudents }: { initialStudents: any[] }) {
+function StudentDirectoryContent({ initialStudents }: { initialStudents: any[] }) {
+  const searchParams = useSearchParams();
+  const initialSearch = searchParams.get('search') || searchParams.get('q') || '';
+
   const [students] = useState<any[]>(initialStudents);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(initialSearch);
   const [branchFilter, setBranchFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [selectedStudent, setSelectedStudent] = useState<any | null>(null);
+
+  useEffect(() => {
+    const qParam = searchParams.get('search') || searchParams.get('q');
+    if (qParam !== null) {
+      setSearch(qParam);
+    }
+  }, [searchParams]);
 
   const filtered = students.filter((s) => {
     const name = s.fullName || '';
     const email = s.user?.email || '';
     const roll = s.rollNumber || '';
+    const branch = s.branch || '';
+    const skills = s.skills || [];
+    const q = search.trim().toLowerCase();
 
     const matchesSearch =
-      name.toLowerCase().includes(search.toLowerCase()) ||
-      email.toLowerCase().includes(search.toLowerCase()) ||
-      roll.toLowerCase().includes(search.toLowerCase());
+      !q ||
+      name.toLowerCase().includes(q) ||
+      email.toLowerCase().includes(q) ||
+      roll.toLowerCase().includes(q) ||
+      matchesBranch(branch, q) ||
+      skills.some((sk: string) => sk.toLowerCase().includes(q));
 
-    const matchesBranch = branchFilter === 'ALL' || s.branch === branchFilter;
+    const matchesBranchDropdown = branchFilter === 'ALL' || matchesBranch(branch, branchFilter);
     const matchesStatus =
       statusFilter === 'ALL' ||
       (statusFilter === 'PLACED' && s.isPlaced) ||
       (statusFilter === 'UNPLACED' && !s.isPlaced);
 
-    return matchesSearch && matchesBranch && matchesStatus;
+    return matchesSearch && matchesBranchDropdown && matchesStatus;
   });
 
   const exportCSV = () => {
@@ -78,11 +96,31 @@ export default function StudentDirectoryClient({ initialStudents }: { initialStu
           <Search size={16} className={styles.searchIcon} />
           <input
             type="text"
-            placeholder="Search by name, roll number, or email..."
+            placeholder="Search by name, roll number, email, or branch (e.g. Mechanical)..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className={styles.searchInput}
           />
+          {search.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setSearch('')}
+              style={{
+                position: 'absolute',
+                right: '0.75rem',
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--color-text-tertiary)',
+                cursor: 'pointer',
+                padding: '4px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              title="Clear search"
+            >
+              <X size={14} />
+            </button>
+          )}
         </div>
 
         <div className={styles.filterGroup}>
@@ -123,78 +161,121 @@ export default function StudentDirectoryClient({ initialStudents }: { initialStu
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>Roll Number</th>
                 <th>Student</th>
                 <th>Branch</th>
+                <th>Batch</th>
                 <th>CGPA</th>
-                <th>Backlogs</th>
-                <th>Placement Status</th>
-                <th>Offer / Company</th>
+                <th>Status</th>
+                <th>Placed Offer</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {filtered.map((s) => (
-                <tr key={s.id}>
-                  <td><strong>{s.rollNumber}</strong></td>
-                  <td>
-                    <div className={styles.studentInfo}>
-                      <span className={styles.studentName}>{s.fullName || 'Student'}</span>
-                      <span className={styles.studentEmail}>{s.user?.email}</span>
-                    </div>
-                  </td>
-                  <td><span className={styles.branchTag}>{s.branch}</span></td>
-                  <td><strong>{s.cgpa}</strong>/10</td>
-                  <td>{s.backlogs}</td>
-                  <td>
-                    <span className={styles.statusPill} data-placed={s.isPlaced ? 'true' : 'false'}>
-                      {s.isPlaced ? 'Placed' : 'Seeking'}
-                    </span>
-                  </td>
-                  <td>
-                    {s.isPlaced ? (
-                      <span className={styles.placedMeta}>
-                        {s.placedCompany} (₹{s.placedCTC} LPA)
-                      </span>
+              {filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={7} style={{ textAlign: 'center', padding: '2.5rem var(--space-4)', color: 'var(--color-text-secondary)' }}>
+                    {search.trim() ? (
+                      <div>
+                        <p style={{ margin: 0, fontWeight: 500 }}>No students found matching &ldquo;{search}&rdquo;</p>
+                        <button
+                          type="button"
+                          onClick={() => setSearch('')}
+                          style={{
+                            marginTop: '0.5rem',
+                            background: 'none',
+                            border: '1px solid var(--color-border)',
+                            borderRadius: '4px',
+                            padding: '4px 10px',
+                            color: 'var(--color-primary)',
+                            cursor: 'pointer',
+                            fontSize: '0.8rem',
+                          }}
+                        >
+                          Clear search filter
+                        </button>
+                      </div>
                     ) : (
-                      <span className={styles.unplacedMeta}>—</span>
+                      'No students match the selected filters.'
                     )}
                   </td>
-                  <td>
-                    <button
-                      className={styles.viewBtn}
-                      onClick={() => setSelectedStudent(s)}
-                    >
-                      <Eye size={14} /> Profile
-                    </button>
-                  </td>
                 </tr>
-              ))}
+              ) : (
+                filtered.map((s) => (
+                  <tr key={s.id}>
+                    <td>
+                      <div className={styles.studentCell}>
+                        <div className={styles.avatar}>
+                          {(s.fullName || s.user?.email || 'S').charAt(0)}
+                        </div>
+                        <div>
+                          <strong className={styles.studentName}>{s.fullName || 'Student'}</strong>
+                          <span className={styles.studentRoll}>{s.rollNumber}</span>
+                          <span className={styles.studentEmail}>{s.user?.email}</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span className={styles.branchPill}>{s.branch}</span>
+                    </td>
+                    <td>{s.batch || '—'}</td>
+                    <td>
+                      <strong className={styles.cgpaVal}>{s.cgpa}</strong>
+                      <span className={styles.cgpaScale}>/10</span>
+                    </td>
+                    <td>
+                      <span className={styles.statusBadge} data-status={s.isPlaced ? 'PLACED' : 'UNPLACED'}>
+                        {s.isPlaced ? 'Placed' : 'Seeking'}
+                      </span>
+                    </td>
+                    <td>
+                      {s.isPlaced ? (
+                        <div className={styles.offerDetails}>
+                          <strong>{s.placedCompany}</strong>
+                          <span>₹{s.placedCTC} LPA</span>
+                        </div>
+                      ) : (
+                        <span className={styles.noOfferText}>—</span>
+                      )}
+                    </td>
+                    <td>
+                      <button
+                        className={styles.viewBtn}
+                        onClick={() => setSelectedStudent(s)}
+                        aria-label={`View dossier for ${s.fullName}`}
+                      >
+                        <Eye size={14} /> View Dossier
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Slide-in Student Detail Drawer */}
+      {/* Slide-In Dossier Drawer */}
       <Drawer
         open={Boolean(selectedStudent)}
         onClose={() => setSelectedStudent(null)}
         title={selectedStudent?.fullName || 'Student Dossier'}
-        width="480px"
+        width="500px"
       >
         {selectedStudent && (
-          <div className={styles.drawerBody}>
-            <div className={styles.drawerTop}>
+          <div className={styles.drawerContent}>
+            {/* Header / Avatar */}
+            <div className={styles.drawerHeader}>
               <div className={styles.drawerAvatar}>
                 {(selectedStudent.fullName || 'S').charAt(0)}
               </div>
               <div>
                 <h3 className={styles.drawerName}>{selectedStudent.fullName}</h3>
+                <p className={styles.drawerRoll}>Roll No: {selectedStudent.rollNumber}</p>
                 <p className={styles.drawerEmail}>{selectedStudent.user?.email}</p>
-                <span className={styles.drawerRoll}>Roll No: {selectedStudent.rollNumber}</span>
               </div>
             </div>
 
+            {/* Quick Metrics */}
             <div className={styles.drawerGrid}>
               <div className={styles.drawerStat}>
                 <span>Branch</span>
@@ -242,8 +323,8 @@ export default function StudentDirectoryClient({ initialStudents }: { initialStu
                   {selectedStudent.applications.map((app: any) => (
                     <div key={app.id} className={styles.appRow}>
                       <div>
-                        <strong>{app.drive.title}</strong>
-                        <span className={styles.appCompany}>{app.drive.company.name}</span>
+                        <strong>{app.drive?.title}</strong>
+                        <span className={styles.appCompany}>{app.drive?.company?.name}</span>
                       </div>
                       <span className={styles.stagePill} data-stage={app.stage}>
                         {app.stage}
@@ -257,5 +338,19 @@ export default function StudentDirectoryClient({ initialStudents }: { initialStu
         )}
       </Drawer>
     </div>
+  );
+}
+
+export default function StudentDirectoryClient({ initialStudents }: { initialStudents: any[] }) {
+  return (
+    <Suspense
+      fallback={
+        <div style={{ padding: '2rem', display: 'flex', justifyContent: 'center' }}>
+          <Loader2 size={24} style={{ animation: 'spin 1s linear infinite', color: 'var(--color-primary)' }} />
+        </div>
+      }
+    >
+      <StudentDirectoryContent initialStudents={initialStudents} />
+    </Suspense>
   );
 }

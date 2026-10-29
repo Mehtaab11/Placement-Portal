@@ -1,12 +1,24 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Search, Building2, MapPin, IndianRupee, CheckCircle2, XCircle, ArrowRight, Filter, Sparkles, Send } from 'lucide-react';
-import { Input } from '@/components/ui/Input/Input';
-import { Button } from '@/components/ui/Button/Button';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import {
+  Search,
+  Building2,
+  MapPin,
+  IndianRupee,
+  CheckCircle2,
+  XCircle,
+  ArrowRight,
+  Send,
+  Loader2,
+  X,
+} from 'lucide-react';
 import { Drawer } from '@/components/ui/Drawer/Drawer';
+import { Button } from '@/components/ui/Button/Button';
 import { useToast } from '@/components/ui/Toast/Toast';
 import { formatDate } from '@/lib/utils';
+import { matchesBranch, matchesBranchList } from '@/lib/branchMatcher';
 import styles from './studentDrives.module.css';
 
 interface Drive {
@@ -38,15 +50,26 @@ interface Drive {
   applicationStage: string | null;
 }
 
-export default function StudentDrivesPage() {
+function StudentDrivesContent() {
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get('search') || searchParams.get('q') || '';
+
   const [drives, setDrives] = useState<Drive[]>([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(initialQuery);
   const [branchFilter, setBranchFilter] = useState('ALL');
   const [jobTypeFilter, setJobTypeFilter] = useState('ALL');
   const [selectedDrive, setSelectedDrive] = useState<Drive | null>(null);
   const [applying, setApplying] = useState(false);
   const { addToast } = useToast();
+
+  // Sync if query param changes externally
+  useEffect(() => {
+    const qParam = searchParams.get('search') || searchParams.get('q');
+    if (qParam !== null) {
+      setSearch(qParam);
+    }
+  }, [searchParams]);
 
   const fetchDrives = async () => {
     try {
@@ -112,23 +135,29 @@ export default function StudentDrivesPage() {
     const title = d.title || '';
     const compName = d.company?.name || '';
     const loc = d.location || '';
-    const q = search.toLowerCase();
+    const desc = d.description || '';
+    const q = search.trim().toLowerCase();
 
+    // Comprehensive search matching title, company, location, description, or allowed branches (e.g. "mechanical")
     const matchesSearch =
+      !q ||
       title.toLowerCase().includes(q) ||
       compName.toLowerCase().includes(q) ||
-      loc.toLowerCase().includes(q);
+      loc.toLowerCase().includes(q) ||
+      desc.toLowerCase().includes(q) ||
+      d.jobType.toLowerCase().includes(q) ||
+      matchesBranchList(d.eligibilityCriteria?.allowedBranches, q);
 
     const allowed = d.eligibilityCriteria?.allowedBranches;
-    const matchesBranch =
+    const matchesBranchDropdown =
       branchFilter === 'ALL' ||
       !allowed ||
       allowed.length === 0 ||
-      allowed.includes(branchFilter);
+      allowed.some((b) => matchesBranch(b, branchFilter));
 
     const matchesJobType = jobTypeFilter === 'ALL' || d.jobType === jobTypeFilter;
 
-    return matchesSearch && matchesBranch && matchesJobType;
+    return matchesSearch && matchesBranchDropdown && matchesJobType;
   });
 
   return (
@@ -148,11 +177,29 @@ export default function StudentDrivesPage() {
           <Search size={16} className={styles.searchIcon} />
           <input
             type="text"
-            placeholder="Search by company, role, or location..."
+            placeholder="Search by company, role, branch (e.g. Mechanical), or location..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className={styles.searchInput}
           />
+          {search.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setSearch('')}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--color-text-tertiary)',
+                cursor: 'pointer',
+                padding: '4px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              title="Clear search"
+            >
+              <X size={14} />
+            </button>
+          )}
         </div>
 
         <div className={styles.selectGroup}>
@@ -195,7 +242,16 @@ export default function StudentDrivesPage() {
         <div className={styles.emptyState}>
           <Building2 size={40} color="var(--color-text-tertiary)" />
           <h3>No matching drives found</h3>
-          <p>Try adjusting your search criteria or branch filters.</p>
+          <p>
+            {search.trim()
+              ? `No placement drives matched "${search}". Try checking other branches or clearing filters.`
+              : 'Try adjusting your search criteria or branch filters.'}
+          </p>
+          {search.trim() && (
+            <Button size="sm" variant="outline" onClick={() => setSearch('')} style={{ marginTop: '0.75rem' }}>
+              Clear Search Query
+            </Button>
+          )}
         </div>
       ) : (
         <div className={styles.grid}>
@@ -382,5 +438,21 @@ export default function StudentDrivesPage() {
         )}
       </Drawer>
     </div>
+  );
+}
+
+function DrivesFallback() {
+  return (
+    <div style={{ padding: '2rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Loader2 size={24} style={{ animation: 'spin 1s linear infinite', color: 'var(--color-primary)' }} />
+    </div>
+  );
+}
+
+export default function StudentDrivesPage() {
+  return (
+    <Suspense fallback={<DrivesFallback />}>
+      <StudentDrivesContent />
+    </Suspense>
   );
 }

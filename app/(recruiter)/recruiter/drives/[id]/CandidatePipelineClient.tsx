@@ -1,17 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { Search, UserCheck, Calendar, CheckCircle2, XCircle, ArrowLeft, Eye, Award } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { Search, UserCheck, Calendar, CheckCircle2, XCircle, ArrowLeft, Eye, Award, X, Loader2 } from 'lucide-react';
 import styles from './pipeline.module.css';
 import { Drawer } from '@/components/ui/Drawer/Drawer';
 import { Button } from '@/components/ui/Button/Button';
 import { useToast } from '@/components/ui/Toast/Toast';
 import { formatDate } from '@/lib/utils';
+import { matchesBranch } from '@/lib/branchMatcher';
 
-export default function CandidatePipelineClient({ drive }: { drive: any }) {
+function CandidatePipelineInner({ drive }: { drive: any }) {
+  const searchParams = useSearchParams();
+  const initialSearch = searchParams.get('search') || searchParams.get('q') || '';
+
   const [applications, setApplications] = useState<any[]>(drive.applications || []);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(initialSearch);
   const [stageFilter, setStageFilter] = useState('ALL');
   const [selectedApp, setSelectedApp] = useState<any | null>(null);
   const [updating, setUpdating] = useState(false);
@@ -19,6 +24,13 @@ export default function CandidatePipelineClient({ drive }: { drive: any }) {
   const [updateNotes, setUpdateNotes] = useState('');
 
   const { addToast } = useToast();
+
+  useEffect(() => {
+    const qParam = searchParams.get('search') || searchParams.get('q');
+    if (qParam !== null) {
+      setSearch(qParam);
+    }
+  }, [searchParams]);
 
   const handleUpdateStage = async (appId: string, newStage: string) => {
     try {
@@ -56,11 +68,17 @@ export default function CandidatePipelineClient({ drive }: { drive: any }) {
     const name = a.student.fullName || '';
     const email = a.student.user?.email || '';
     const branch = a.student.branch || '';
+    const roll = a.student.rollNumber || '';
+    const skills = a.student.skills || [];
+    const q = search.trim().toLowerCase();
 
     const matchesSearch =
-      name.toLowerCase().includes(search.toLowerCase()) ||
-      email.toLowerCase().includes(search.toLowerCase()) ||
-      branch.toLowerCase().includes(search.toLowerCase());
+      !q ||
+      name.toLowerCase().includes(q) ||
+      email.toLowerCase().includes(q) ||
+      roll.toLowerCase().includes(q) ||
+      matchesBranch(branch, q) ||
+      skills.some((s: string) => s.toLowerCase().includes(q));
 
     const matchesStage = stageFilter === 'ALL' || a.stage === stageFilter;
 
@@ -89,11 +107,29 @@ export default function CandidatePipelineClient({ drive }: { drive: any }) {
           <Search size={16} className={styles.searchIcon} />
           <input
             type="text"
-            placeholder="Search candidate name, email, or branch..."
+            placeholder="Search candidate name, email, roll number, or branch (e.g. Mechanical)..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className={styles.searchInput}
           />
+          {search.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setSearch('')}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--color-text-tertiary)',
+                cursor: 'pointer',
+                padding: '4px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              title="Clear search"
+            >
+              <X size={14} />
+            </button>
+          )}
         </div>
 
         <select
@@ -126,38 +162,73 @@ export default function CandidatePipelineClient({ drive }: { drive: any }) {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((app) => (
-                <tr key={app.id}>
-                  <td>
-                    <div className={styles.candidateCell}>
-                      <div className={styles.avatar}>
-                        {(app.student.fullName || 'S').charAt(0)}
-                      </div>
+              {filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={7} style={{ textAlign: 'center', padding: '2.5rem var(--space-4)', color: 'var(--color-text-secondary)' }}>
+                    {search.trim() ? (
                       <div>
-                        <strong className={styles.candidateName}>{app.student.fullName || 'Student'}</strong>
-                        <span className={styles.candidateEmail}>{app.student.user?.email}</span>
+                        <p style={{ margin: 0, fontWeight: 500 }}>No candidates found matching &ldquo;{search}&rdquo;</p>
+                        <button
+                          type="button"
+                          onClick={() => setSearch('')}
+                          style={{
+                            marginTop: '0.5rem',
+                            background: 'none',
+                            border: '1px solid var(--color-border)',
+                            borderRadius: '4px',
+                            padding: '4px 10px',
+                            color: 'var(--color-primary)',
+                            cursor: 'pointer',
+                            fontSize: '0.8rem',
+                          }}
+                        >
+                          Clear search filter
+                        </button>
                       </div>
-                    </div>
-                  </td>
-                  <td><span className={styles.branchTag}>{app.student.branch}</span></td>
-                  <td><strong>{app.student.cgpa}</strong>/10</td>
-                  <td>{app.student.backlogs}</td>
-                  <td>
-                    <span className={styles.stageBadge} data-stage={app.stage}>
-                      {app.stage}
-                    </span>
-                  </td>
-                  <td>{formatDate(app.appliedAt)}</td>
-                  <td>
-                    <button
-                      className={styles.reviewBtn}
-                      onClick={() => setSelectedApp(app)}
-                    >
-                      <Eye size={14} /> Review Candidate
-                    </button>
+                    ) : (
+                      'No candidates match the selected stage filter.'
+                    )}
                   </td>
                 </tr>
-              ))}
+              ) : (
+                filtered.map((app) => (
+                  <tr key={app.id}>
+                    <td>
+                      <div className={styles.candidateCell}>
+                        <div className={styles.avatar}>
+                          {(app.student.fullName || 'S').charAt(0)}
+                        </div>
+                        <div>
+                          <strong className={styles.candidateName}>{app.student.fullName || 'Student'}</strong>
+                          <span className={styles.candidateEmail}>{app.student.user?.email}</span>
+                          {app.student.rollNumber && (
+                            <span style={{ fontSize: '0.72rem', color: 'var(--color-text-tertiary)', display: 'block' }}>
+                              Roll: {app.student.rollNumber}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </td>
+                    <td><span className={styles.branchTag}>{app.student.branch}</span></td>
+                    <td><strong>{app.student.cgpa}</strong>/10</td>
+                    <td>{app.student.backlogs}</td>
+                    <td>
+                      <span className={styles.stageBadge} data-stage={app.stage}>
+                        {app.stage}
+                      </span>
+                    </td>
+                    <td>{formatDate(app.appliedAt)}</td>
+                    <td>
+                      <button
+                        className={styles.reviewBtn}
+                        onClick={() => setSelectedApp(app)}
+                      >
+                        <Eye size={14} /> Review Candidate
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -280,5 +351,17 @@ export default function CandidatePipelineClient({ drive }: { drive: any }) {
         )}
       </Drawer>
     </div>
+  );
+}
+
+export default function CandidatePipelineClient({ drive }: { drive: any }) {
+  return (
+    <Suspense fallback={
+      <div style={{ padding: '2rem', display: 'flex', justifyContent: 'center' }}>
+        <Loader2 size={24} style={{ animation: 'spin 1s linear infinite', color: 'var(--color-primary)' }} />
+      </div>
+    }>
+      <CandidatePipelineInner drive={drive} />
+    </Suspense>
   );
 }

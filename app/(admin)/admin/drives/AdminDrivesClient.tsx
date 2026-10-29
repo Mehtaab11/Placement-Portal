@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { Search, Briefcase, CheckCircle2, Users, Award, Eye, Calendar, DollarSign, MapPin, Plus } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { Search, Briefcase, CheckCircle2, Users, Award, Eye, Calendar, DollarSign, MapPin, Plus, X, Loader2 } from 'lucide-react';
 import { Drawer } from '@/components/ui/Drawer/Drawer';
 import { Button } from '@/components/ui/Button/Button';
 import { formatDate } from '@/lib/utils';
+import { matchesBranchList } from '@/lib/branchMatcher';
 import styles from './adminDrives.module.css';
 
 interface DriveItem {
@@ -49,23 +51,35 @@ interface Metrics {
   totalOffers: number;
 }
 
-export function AdminDrivesClient({
+function AdminDrivesContent({
   drives,
   metrics,
 }: {
   drives: DriveItem[];
   metrics: Metrics;
 }) {
-  const [search, setSearch] = useState('');
+  const searchParams = useSearchParams();
+  const initialSearch = searchParams.get('search') || searchParams.get('q') || '';
+  const [search, setSearch] = useState(initialSearch);
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [selectedDrive, setSelectedDrive] = useState<DriveItem | null>(null);
 
+  useEffect(() => {
+    const qParam = searchParams.get('search') || searchParams.get('q');
+    if (qParam !== null) {
+      setSearch(qParam);
+    }
+  }, [searchParams]);
+
   const filtered = drives.filter((d) => {
-    const q = search.toLowerCase();
+    const q = search.trim().toLowerCase();
     const matchesSearch =
+      !q ||
       d.title.toLowerCase().includes(q) ||
       d.company.name.toLowerCase().includes(q) ||
-      d.location.toLowerCase().includes(q);
+      d.location.toLowerCase().includes(q) ||
+      d.description.toLowerCase().includes(q) ||
+      matchesBranchList(d.eligibilityCriteria?.allowedBranches, q);
 
     const matchesStatus = statusFilter === 'ALL' || d.status === statusFilter;
 
@@ -98,7 +112,7 @@ export function AdminDrivesClient({
           </div>
           <div>
             <div className={styles.metricVal}>{metrics.totalDrives}</div>
-            <div className={styles.metricLabel}>Total Drives Posted</div>
+            <div className={styles.metricLabel}>Total Placement Drives</div>
           </div>
         </div>
 
@@ -108,17 +122,17 @@ export function AdminDrivesClient({
           </div>
           <div>
             <div className={styles.metricVal}>{metrics.liveDrives}</div>
-            <div className={styles.metricLabel}>Active Live Drives</div>
+            <div className={styles.metricLabel}>Active / Live Drives</div>
           </div>
         </div>
 
         <div className={styles.metricCard}>
-          <div className={`${styles.metricIcon} ${styles.metricIconAmber}`}>
+          <div className={`${styles.metricIcon} ${styles.metricIconPurple}`}>
             <Users size={22} />
           </div>
           <div>
             <div className={styles.metricVal}>{metrics.totalApps}</div>
-            <div className={styles.metricLabel}>Candidate Registrations</div>
+            <div className={styles.metricLabel}>Total Applications Received</div>
           </div>
         </div>
 
@@ -139,11 +153,31 @@ export function AdminDrivesClient({
           <Search size={16} className={styles.searchIcon} />
           <input
             type="text"
-            placeholder="Search drives by title, company, or location..."
+            placeholder="Search drives by title, company, location, or branch (e.g. Mechanical)..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className={styles.searchInput}
           />
+          {search.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setSearch('')}
+              style={{
+                position: 'absolute',
+                right: '0.75rem',
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--color-text-tertiary)',
+                cursor: 'pointer',
+                padding: '4px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              title="Clear search"
+            >
+              <X size={14} />
+            </button>
+          )}
         </div>
 
         <select
@@ -227,7 +261,29 @@ export function AdminDrivesClient({
               {filtered.length === 0 && (
                 <tr>
                   <td colSpan={9} style={{ textAlign: 'center', padding: 'var(--space-8)' }}>
-                    No drives matching your search criteria.
+                    {search.trim() ? (
+                      <div>
+                        <p style={{ margin: 0, fontWeight: 500 }}>No drives found matching &ldquo;{search}&rdquo;</p>
+                        <button
+                          type="button"
+                          onClick={() => setSearch('')}
+                          style={{
+                            marginTop: '0.5rem',
+                            background: 'none',
+                            border: '1px solid var(--color-border)',
+                            borderRadius: '4px',
+                            padding: '4px 10px',
+                            color: 'var(--color-primary)',
+                            cursor: 'pointer',
+                            fontSize: '0.8rem',
+                          }}
+                        >
+                          Clear search filter
+                        </button>
+                      </div>
+                    ) : (
+                      'No drives matching your search criteria.'
+                    )}
                   </td>
                 </tr>
               )}
@@ -339,5 +395,25 @@ export function AdminDrivesClient({
         )}
       </Drawer>
     </div>
+  );
+}
+
+export function AdminDrivesClient({
+  drives,
+  metrics,
+}: {
+  drives: DriveItem[];
+  metrics: Metrics;
+}) {
+  return (
+    <Suspense
+      fallback={
+        <div style={{ padding: '2rem', display: 'flex', justifyContent: 'center' }}>
+          <Loader2 size={24} style={{ animation: 'spin 1s linear infinite', color: 'var(--color-primary)' }} />
+        </div>
+      }
+    >
+      <AdminDrivesContent drives={drives} metrics={metrics} />
+    </Suspense>
   );
 }
