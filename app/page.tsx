@@ -303,7 +303,7 @@ export default function HomePage() {
         <div className={styles.showcaseContainer}>
           <div className={styles.showcaseVisual}>
             <Image
-              src="/campus-placement-cell.jpg"
+              src="/second.png"
               alt="Students outside University Placement Cell"
               width={700}
               height={450}
